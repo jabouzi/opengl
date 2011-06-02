@@ -6,10 +6,12 @@
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
+#include <iostream>
+using namespace std;
 
-#include "glut/glut.h"
+#include "GL/glut.h"
 #include "GLTexture.h"
-#include "gltexfont/gltexfont.h"
+//#include "gltexfont/gltexfont.h"
 
 #include "countries/countries.h"
 
@@ -67,7 +69,7 @@ struct Vxp {
 
 // variables
 CGLTexture earthTexture;
-
+  
 Vector	vertices[EARTH_LON_RES+1][EARTH_LAT_RES+1];
 Mapping mapping[EARTH_LON_RES+1][EARTH_LAT_RES+1];
 
@@ -150,7 +152,7 @@ void Idle()
 
 void Init()
 {
-	earthTexture.LoadTGA("images/earth.tga");
+	earthTexture.LoadTGA("images/earth_vector.tga");
 
 	// generate our sphere
 	for (int x=0; x<=EARTH_LON_RES; x++) {
@@ -375,10 +377,10 @@ void DrawScene()
 			// now isn't this the nastiest trick
 			if (winZ < 0.999f) {
 				glColor4f(1,1,1,.5f);
-				fontShadow();
-				fontShadowColor(0,0,0);
-				fontSize(10+4000*(0.999-winZ));
-				fontDrawString(winX, winY, countries[i].name);
+				//~ fontShadow();
+				//~ fontShadowColor(0,0,0);
+				//~ fontSize(10+4000*(0.999-winZ));
+				//~ fontDrawString(winX, winY, countries[i].name);
 			}
 		}
 
@@ -539,7 +541,7 @@ void Keyboard(unsigned char key, int x, int y)
 	}
 }
 
-void main(int argc, char **argv) 
+int main(int argc, char **argv) 
 { 
 	GLsizei iWidth = 640.0; 
 	GLsizei iHeight = 480.0; 
@@ -560,13 +562,16 @@ void main(int argc, char **argv)
 
 	Init();
  
-	glClearColor(0.13f, 0.34f, 0.83f,0); // blue
+	//glClearColor(0.13f, 0.34f, 0.83f,0); // blue
+	glClearColor(0.0f, 0.0f, 0.0f,0); // blue
 	glEnable(GL_DEPTH_TEST); 
 	glDepthFunc(GL_LEQUAL);
 
 	Resize(iWidth, iHeight); 
 
-    fontLoad("gltexfont/font.tga");
+    //~ fontLoad("gltexfont/font.tga");
 
 	glutMainLoop(); 
+	
+	return 0;
 }
