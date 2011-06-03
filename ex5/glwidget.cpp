@@ -16,11 +16,13 @@ void GLWidget::initializeGL()
 }
 
 void GLWidget::cube (void) {
-    glRotatef(angle, 1.0, 0.0, 0.0); //rotate on the x axis
-    glRotatef(angle, 0.0, 1.0, 0.0); //rotate on the y axis
-    glRotatef(angle, 0.0, 0.0, 1.0); //rotate on the z axis
-    glColor3f(1.0, 0.0, 0.0);
-    glutWireCube(2);
+    glRotatef(angle, 1.0, 0.0, 0.0);
+    glRotatef(angle, 0.0, 1.0, 0.0);
+    glRotatef(angle, 0.0, 0.0, 1.0);
+    glColor4f(1.0, 0.0, 0.0, 0.2);
+    glutSolidCube(2);
+    glColor4f(0.0, 1.0, 0.0, 0.5);
+    glutSolidCube(1);
 }
 
 
@@ -28,6 +30,8 @@ void GLWidget::paintGL()
 {
     glClearColor (0.0,0.0,0.0,1.0);
     glClear (GL_COLOR_BUFFER_BIT);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glLoadIdentity();
     gluLookAt (0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
     cube();
