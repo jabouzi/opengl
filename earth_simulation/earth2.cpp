@@ -11,20 +11,6 @@ using namespace std;
 #include "GL/glut.h"
 #include "GLTexture.h"
 
-// menu
-enum MenuCommands {
-	MENU_TEXTURE	= 0,
-	MENU_WIREFRAME,
-	MENU_LINEWIDTH,
-	MENU_COUNTRY_NAMES,	
-	MENU_COAST,
-	MENU_ISLAND,
-	MENU_LAKE,
-	MENU_RIVER,
-	MENU_NATION,
-	MENU_USSTATE,
-	MENU_EXIT
-};
 
 // defines
 #define EARTH_LON_RES	60	// Longitude Resolution (x)
