@@ -11,10 +11,7 @@ using namespace std;
 
 #include "GL/glut.h"
 #include "GLTexture.h"
-// #include "gltexfont/gltexfont.h"
-
 #include "countries/countries.h"
-
 
 // menu
 enum MenuCommands {
@@ -34,11 +31,8 @@ enum MenuCommands {
 // defines
 #define EARTH_LON_RES	60	// Longitude Resolution (x)
 #define EARTH_LAT_RES	60	// Latitude Resolution (y)
-
 #define EARTH_RADIUS	6378	// in kilometers
-
 #define WORLD_SCALE		0.01f	// scale of all the world
-
 #define MIN_SCALE		0.5f	// how much can we zoom out
 #define MAX_SCALE		1.9f	// and in
 
@@ -261,73 +255,18 @@ void DrawScene()
 	static float time = 0;
 	time += 0.1;
 
-	// if the mouse-button is not down, auto-rotate
-	if (!mouseButtonDown) {
-		rotX += autoRotX*scaleAll*0.1f;
-		rotY += autoRotY*scaleAll*0.1f;
-	}
-
 	glTranslatef(0,0,-125);
 	glScalef(WORLD_SCALE, WORLD_SCALE, WORLD_SCALE);
-	glScalef(scaleAll, scaleAll, scaleAll);
 	glRotatef(rotY, 1,0,0);
 	glRotatef(rotX, 0,1,0);
 
 	GLdouble modelview_matrix[16];
 	glGetDoublev(GL_MODELVIEW_MATRIX, modelview_matrix);
 
-
 	DrawEarth();
-
-	// darw state vector-data
-	glPushMatrix();
-	glScalef(1.001f, 1.001f, 1.001f);
-	glLineWidth(lineWidth);
-
-	glPopMatrix();	
+	
 	glPopMatrix();
 	glutSwapBuffers(); 
-	//glutPostRedisplay();
-}
-
-void MouseMotion(int x, int y)
-{
-	int	deltX, deltY;
-
-	// calculate mouse movement since click
-	deltX = x - mouseX;
-	deltY = y - mouseY;
-
-	// store new mouse position
-	mouseX = x;
-	mouseY = y;
-
-	if (mouseButtonDown) {
-		// is Cotrl Down ?
-		if (isCtrlDown) {
-			// scale
-			float addition;
-			addition = ((deltX+deltY) / 200.f);
-			
-			if (addition < 0 && scaleAll+addition > MIN_SCALE) {
-				scaleAll += addition;
-			}
-
-			if (addition > 0 && scaleAll+addition < MAX_SCALE) {
-				scaleAll += addition;
-			}
-		} else {
-			// rotate
-			rotX += deltX*0.25f/scaleAll;
-			rotY += deltY*0.25f/scaleAll;
-
-			// save values for auto rotation
-			autoRotX = deltX*0.25f;
-			autoRotY = deltY*0.25f;
-		}
-
-		glutPostRedisplay();
-	}
 }
 
 int main(int argc, char **argv) 

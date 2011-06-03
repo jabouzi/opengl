@@ -1,6 +1,5 @@
 #include <GL/gl.h>
 #include <GL/glut.h>
-//#include <windows.h>
 #include <stdio.h>
 #include <math.h>
 #include <iostream>
@@ -34,8 +33,6 @@ void DisplaySphere (double R, GLuint texture){
         glTexCoord2f (VERTEX[b].U, VERTEX[b].V);        
         glVertex3f (VERTEX[b].X, VERTEX[b].Y, -VERTEX[b].Z);
     }
-    
-
     
     for ( b = 0; b <= VertexCount; b++){        
         glTexCoord2f (VERTEX[b].U, -VERTEX[b].V);        
