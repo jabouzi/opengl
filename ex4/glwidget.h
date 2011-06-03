@@ -30,14 +30,14 @@ public:
 	QSize sizeHint() const;
 
 protected:
-    bool movingUp;
-    float yLocation;
-    float yRotationAngle;
+    GLfloat angle;
 
 	void initializeGL();
+    void cube();
 	void paintGL();
-	void resizeGL(int width, int height);
+    void resizeGL(int width, int height);
     void timerEvent(QTimerEvent *event);
+
 };
 
 #endif // __GLWIDGET_H__
