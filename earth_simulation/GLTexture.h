@@ -5,7 +5,7 @@
 #ifndef __GLTexture_h_
 #define __GLTexture_h_
 
-#include "glut/glut.h"
+#include "GL/glut.h"
 
 class CGLTexture
 {
