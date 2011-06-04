@@ -1,7 +1,7 @@
 // earth-simulation by Ohad Eder Pressman, 2001
 // ohad@visual-i.com / ohad.visual-i.com
 
-#define PI 3.14159265
+
 
 #include <stdio.h>
 #include <math.h>
@@ -13,6 +13,7 @@ using namespace std;
 
 
 // defines
+#define PI 3.14159265
 #define EARTH_LON_RES	60	// Longitude Resolution (x)
 #define EARTH_LAT_RES	60	// Latitude Resolution (y)
 #define EARTH_RADIUS	6378	// in kilometers

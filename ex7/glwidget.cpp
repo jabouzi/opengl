@@ -29,9 +29,7 @@ void GLWidget::cube (void) {
 void GLWidget::paintGL()
 {
     glClearColor (0.0,0.0,0.0,1.0);
-    glClear (GL_COLOR_BUFFER_BIT);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
     gluLookAt (0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
     cube();
@@ -60,5 +58,5 @@ QSize GLWidget::sizeHint() const
 
 void GLWidget::timerEvent(QTimerEvent *event)
 {
-    //updateGL();
+    updateGL();
 }
