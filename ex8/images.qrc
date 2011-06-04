@@ -1,0 +1,7 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource prefix="/">
+    <file>images/earth.tga</file> 
+    <file>images/earth_elevation.tga</file> 
+    <file>images/earth_vector.tga</file>    
+</qresource>
+</RCC>
