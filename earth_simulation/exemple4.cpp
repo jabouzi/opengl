@@ -17,8 +17,8 @@ typedef struct
 }VERTICES;
 
 const double PI = 3.1415926535897;
-const int space = 10;
-const int VertexCount = (90 / space) * (360 / space) * 4;
+const int space = 1;
+const int VertexCount = (180 / space) * (360 / space) * 4;
 VERTICES VERTEX[VertexCount];
 GLuint LoadTextureRAW( const char * filename );
 
@@ -95,7 +95,7 @@ void init (void) {
     glCullFace(GL_BACK);    
     glFrontFace(GL_CCW);    
     glEnable(GL_CULL_FACE);    
-    texture[0] = LoadTextureRAW( "earth.raw" );    
+    texture[0] = LoadTextureRAW( "earth_vector.png" );    
     CreateSphere(70,0,0,0);
 }
 

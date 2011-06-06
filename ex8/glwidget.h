@@ -4,12 +4,12 @@
 #include <QGLWidget>
 #include <stdio.h>
 #include <math.h>
-#include <string.h>
+//#include <string.h>
 #include "GLTexture.h"
 #include "trackball.h"
 
-#define WINDOW_WIDTH  460
-#define WINDOW_HEIGHT 480
+#define WINDOW_WIDTH  500
+#define WINDOW_HEIGHT 500
 #define PI 3.14159265
 #define EARTH_LON_RES    60    // Longitude Resolution (x)
 #define EARTH_LAT_RES    60    // Latitude Resolution (y)
@@ -38,10 +38,11 @@ public:
 protected:
     GLfloat angle;
     CGLTexture earthTexture;
-    Vector    vertices[EARTH_LON_RES+1][EARTH_LAT_RES+1];
+    Vector vertices[EARTH_LON_RES+1][EARTH_LAT_RES+1];
     Mapping mapping[EARTH_LON_RES+1][EARTH_LAT_RES+1];
     float rotX, rotY, autoRotX, autoRotY, scaleAll;
     TrackBall _trackball;
+    int lineWidth;
 
     void initializeGL();
     void paintGL();

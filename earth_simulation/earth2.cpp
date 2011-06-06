@@ -37,6 +37,7 @@ Mapping mapping[EARTH_LON_RES+1][EARTH_LAT_RES+1];
 float rotX = 140, rotY = 0;
 float autoRotX = 0, autoRotY = 0;
 double angle = 0;
+int lineWidth		= 1;
 
 // forward
 void LonLat2Point(float lon, float lat, Vector *pos);
@@ -60,8 +61,10 @@ void Init()
 {
 	earthTexture.LoadTGA("images/earth_vector.tga");
 	// generate our sphere
+    //int count = 0;
 	for (int x=0; x<=EARTH_LON_RES; x++) {
 		for (int y=0; y<=EARTH_LAT_RES; y++) {
+            //count++;
 			// angle around y-axis (which is x-value)
 			float	angX, angY;
 			angX = (x * 360.f / EARTH_LON_RES) * PI / 180.f;
@@ -71,21 +74,24 @@ void Init()
 			vertices[x][y].z = fabsf(cosf(angY)) * EARTH_RADIUS * cosf(angX);
 			mapping[x][y].u = (float)x / EARTH_LON_RES;
 			mapping[x][y].v = (float)y / EARTH_LAT_RES;
+            cout << angX << " - " << angY << endl;
 		}
 	}
+    //cout << 'Count : ' << count;
 }
 
 void DrawEarth()
 {	
-	glEnable(GL_TEXTURE_2D);
-	earthTexture.Use();	
-	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	//glEnable(GL_TEXTURE_2D);
+	//earthTexture.Use();	
+	//glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	//glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 	glColor3f(1,1,1);
 	int x, y;
 	for (y=0; y<EARTH_LAT_RES; y++) {
 		glBegin(GL_QUAD_STRIP);		
 		for (x=0; x<EARTH_LON_RES; x++) {
+            glColor2d(1,0,0);
 			glTexCoord2fv((float*)&mapping[x][y]);
 			glVertex3fv((float*)&vertices[x][y]);
 			glTexCoord2fv((float*)&mapping[x][y+1]);
@@ -93,11 +99,37 @@ void DrawEarth()
 			glTexCoord2fv((float*)&mapping[x+1][y]);
 			glVertex3fv((float*)&vertices[x+1][y]);
 			glTexCoord2fv((float*)&mapping[x+1][y+1]);
-			glVertex3fv((float*)&vertices[x+1][y+1]);
+			glVertex3fv((float*)&vertices[x+1][y+1]);            
 		}
 		glEnd();
 	}	
-	glDisable(GL_TEXTURE_2D);
+    
+    glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		glLineWidth(lineWidth);
+
+		for (y=0; y<=EARTH_LAT_RES; y++) {
+			glBegin(GL_LINE_STRIP);
+			for (x=0; x<=EARTH_LON_RES; x++) {
+				glColor4f(0,0,0,0.2f);
+				glVertex3fv((float*)&vertices[x][y]);
+			}
+			glEnd();
+		}
+
+		for (x=0; x<=EARTH_LON_RES; x++) {
+			glBegin(GL_LINE_STRIP);
+			for (y=0; y<=EARTH_LAT_RES; y++) {
+				glColor4f(0,0,0,0.2f);
+				glVertex3fv((float*)&vertices[x][y]);
+			}
+			glEnd();
+		}
+
+		glDisable(GL_BLEND);
+        
+	//glDisable(GL_TEXTURE_2D);
 }
 
 void LonLat2Point(float lon, float lat, Vector *pos)
@@ -114,17 +146,20 @@ void LonLat2Point(float lon, float lat, Vector *pos)
 
 void DrawScene() 
 { 	
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); 
-	glPushMatrix(); 
-	glTranslatef(0,0,-125);
-	glScalef(WORLD_SCALE, WORLD_SCALE, WORLD_SCALE);
-	glRotatef(angle,0,1,0);
-	GLdouble modelview_matrix[16];
-	glGetDoublev(GL_MODELVIEW_MATRIX, modelview_matrix);
-	DrawEarth();	
-	glPopMatrix();
-	glutSwapBuffers(); 
-    angle ++;
+	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    glPushMatrix();
+    glTranslatef(0,0,-125);
+    glScalef(WORLD_SCALE, WORLD_SCALE, WORLD_SCALE);
+    //glScalef(scaleAll, scaleAll, scaleAll);
+    glRotatef(rotY, 1,0,0);
+    glRotatef(rotX, 0,1,0);
+    GLdouble modelview_matrix[16];
+    glGetDoublev(GL_MODELVIEW_MATRIX, modelview_matrix);
+    DrawEarth();
+    glPopMatrix();
+    glutSwapBuffers(); 
+    //rotY++;
+    rotX++;
 }
 
 int main(int argc, char **argv) 
