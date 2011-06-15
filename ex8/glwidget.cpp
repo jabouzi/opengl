@@ -105,7 +105,7 @@ void GLWidget::paintGL()
     glPushMatrix();
     glTranslatef(0,0,-125);
     glScalef(WORLD_SCALE, WORLD_SCALE, WORLD_SCALE);
-    //glScalef(scaleAll, scaleAll, scaleAll);
+    glScalef(scaleAll, scaleAll, scaleAll);
     glRotatef(rotY, 1,0,0);
     glRotatef(rotX, 0,1,0);
     GLdouble modelview_matrix[16];
@@ -176,6 +176,18 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
 		//qDebug() << 'y : ' << event->y() << endl;
 		//rotateBy(deltX, deltY, 0);
 		
+	}
+	else if (event->buttons() & Qt::MidButton) {
+		float addition;
+		addition = ((deltX+deltY) / 200.f);
+		
+		if (addition < 0 && scaleAll+addition > MIN_SCALE) {
+			scaleAll += addition;
+		}
+
+		if (addition > 0 && scaleAll+addition < MAX_SCALE) {
+			scaleAll += addition;
+		}
 	}
 	//
 	lastPos = event->pos();
