@@ -21,21 +21,21 @@ void GLWidget::initializeGL()
     for (int x=0; x<=EARTH_LON_RES; x++) {
         for (int y=0; y<=EARTH_LAT_RES; y++) {
             // angle around y-axis (which is x-value)
-            GLfloat    angX, angY;
-            angX = (x * 360.0f / EARTH_LON_RES) * PI / 180.0f;
-            angY = (-90.f + (y * 180.0f / EARTH_LAT_RES)) * PI / 180.0f;
-            vertices[x][y].x = fabsf(cosf(angY)) * EARTH_RADIUS * sinf(angX);
-            vertices[x][y].y = EARTH_RADIUS * sinf(angY);
-            vertices[x][y].z = fabsf(cosf(angY)) * EARTH_RADIUS * cosf(angX);
-            mapping[x][y].u = (GLfloat)x / EARTH_LON_RES;
-            mapping[x][y].v = (GLfloat)y / EARTH_LAT_RES;
+            float	angX, angY;
+			angX = (x * 360.f / EARTH_LON_RES) * PI / 180.f;
+			angY = (-90.f + (y * 180.f / EARTH_LAT_RES)) * PI / 180.f;
+			vertices[x][y].x = fabsf(cosf(angY)) * EARTH_RADIUS * sinf(angX);
+			vertices[x][y].y = EARTH_RADIUS * sinf(angY);
+			vertices[x][y].z = fabsf(cosf(angY)) * EARTH_RADIUS * cosf(angX);
+			mapping[x][y].u = (float)x / EARTH_LON_RES;
+			mapping[x][y].v = (float)y / EARTH_LAT_RES;
         }
-
     }
 }
 
 void GLWidget::DrawEarth()
 {
+
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
     earthTexture.Use();
@@ -44,8 +44,9 @@ void GLWidget::DrawEarth()
     glColor3f(1,1,1);
     int x, y;
     for (y=0; y<EARTH_LAT_RES; y++) {
-        glBegin(GL_QUAD_STRIP);
+		glBegin(GL_QUAD_STRIP);
         for (x=0; x<EARTH_LON_RES; x++) {
+
             glTexCoord2fv((GLfloat*)&mapping[x][y]);
             glVertex3fv((GLfloat*)&vertices[x][y]);
             glTexCoord2fv((GLfloat*)&mapping[x][y+1]);
@@ -55,17 +56,17 @@ void GLWidget::DrawEarth()
             glTexCoord2fv((GLfloat*)&mapping[x+1][y+1]);
             glVertex3fv((GLfloat*)&vertices[x+1][y+1]);
         }
-        glEnd();
+		glEnd();
     }
-
-    glEnable(GL_BLEND);
+    
+    /*glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glLineWidth(lineWidth);
 
     for (y=0; y<=EARTH_LAT_RES; y++) {
         glBegin(GL_LINE_STRIP);
         for (x=0; x<=EARTH_LON_RES; x++) {
-            glColor4f(0,0,0,0.2f);
+            glColor4f(0,0,0,1.0f);
             glVertex3fv((float*)&vertices[x][y]);
         }
         glEnd();
@@ -74,13 +75,13 @@ void GLWidget::DrawEarth()
     for (x=0; x<=EARTH_LON_RES; x++) {
         glBegin(GL_LINE_STRIP);
         for (y=0; y<=EARTH_LAT_RES; y++) {
-            glColor4f(0,0,0,0.2f);
+            glColor4f(0,0,0,1.0f);
             glVertex3fv((float*)&vertices[x][y]);
         }
         glEnd();
     }
 
-    glDisable(GL_BLEND);
+    glDisable(GL_BLEND);*/
     glDisable(GL_TEXTURE_2D);
 
 }
@@ -104,7 +105,7 @@ void GLWidget::paintGL()
     glPushMatrix();
     glTranslatef(0,0,-125);
     glScalef(WORLD_SCALE, WORLD_SCALE, WORLD_SCALE);
-    glScalef(scaleAll, scaleAll, scaleAll);
+    //glScalef(scaleAll, scaleAll, scaleAll);
     glRotatef(rotY, 1,0,0);
     glRotatef(rotX, 0,1,0);
     GLdouble modelview_matrix[16];
@@ -147,6 +148,7 @@ QPointF GLWidget::pixelPosToViewPos(const QPointF& p)
      return QPointF(2.0 * float(p.x()) / width() - 1.0, 1.0 - 2.0 * float(p.y()) / height());
 }
 
+
 void GLWidget::rotateBy(int xAngle, int yAngle, int zAngle)
 {
     rotX += xAngle;
@@ -158,6 +160,7 @@ void GLWidget::rotateBy(int xAngle, int yAngle, int zAngle)
 void GLWidget::mousePressEvent(QMouseEvent *event)
 {
     lastPos = event->pos();
+    //qDebug() << lastPos << endl;
 }
 
 void GLWidget::mouseMoveEvent(QMouseEvent *event)
@@ -166,12 +169,16 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
     int deltY = event->y() - lastPos.y();
 
 	if (event->buttons() & Qt::LeftButton) {
-		//rotX += deltX*0.25f/scaleAll;
-		//rotY += deltY*0.25f/scaleAll;
-		rotateBy(1 * deltX, 0 , 0);
+		rotX += deltX*0.25f/scaleAll;
+		rotY += deltY*0.25f/scaleAll;
+		//rotateBy(1 * deltX, 0 , 0);
+		//qDebug() << 'x : ' << event->x() << endl;
+		//qDebug() << 'y : ' << event->y() << endl;
+		//rotateBy(deltX, deltY, 0);
+		
 	}
 	//
-
+	lastPos = event->pos();
 				// save values for auto rotation
 	//autoRotX = deltX*0.25f;
 	//autoRotY = deltY*0.25f;

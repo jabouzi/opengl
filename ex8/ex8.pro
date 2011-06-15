@@ -6,7 +6,7 @@
 
 QT       += core gui opengl
 
-TARGET = ex8
+#TARGET = ex8
 TEMPLATE = app
 
 

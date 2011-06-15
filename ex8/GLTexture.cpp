@@ -1,5 +1,5 @@
 //-------------------------------------------------------------------
-//    CGLTexture - OpenGL Texture Class
+//	CGLTexture - OpenGL Texture Class
 //-------------------------------------------------------------------
 
 #include <stdio.h>
@@ -7,7 +7,7 @@
 #include "GLTexture.h"
 
 CGLTexture::CGLTexture()
-{
+{	
 }
 
 CGLTexture::~CGLTexture()
@@ -16,13 +16,13 @@ CGLTexture::~CGLTexture()
 
 void CGLTexture::Use()
 {
-    glBindTexture(GL_TEXTURE_2D, m_textureID);
+	glBindTexture(GL_TEXTURE_2D, m_textureID);
 }
 
 bool CGLTexture::LoadTGA(char* fileName)
 {
-    glGenTextures(1, &m_textureID);
-    return loadTGATexture(fileName,m_textureID);
+	glGenTextures(1, &m_textureID);
+	return loadTGATexture(fileName,m_textureID);		
 }
 
 /*
@@ -34,10 +34,10 @@ Make sure its a power of 2.
 */
 int CGLTexture::checkSize (int x)
 {
-    return 1;
+	return 1;
 
-    if (x == 2     || x == 4 ||
-        x == 8     || x == 16 ||
+    if (x == 2	 || x == 4 || 
+        x == 8	 || x == 16 || 
         x == 32  || x == 64 ||
         x == 128 || x == 256 || x == 512)
         return 1;
@@ -162,7 +162,7 @@ unsigned char* CGLTexture::getData (FILE *s, int sz, int iBits)
     if (iBits == 32)
         return getRGBA (s, sz);
     else if (iBits == 24)
-        return getRGB (s, sz);
+        return getRGB (s, sz);	
     else if (iBits == 8)
         return getGray (s, sz);
     return NULL;
@@ -188,17 +188,17 @@ bool CGLTexture::loadTGATexture(char *name, int id)
     if (!(s = fopen (name, "r+bt")))
         return false;
         
-
+	
     fread (&type, sizeof (char), 3, s); // read in colormap info and image type, byte 0 ignored
-    fseek (s, 12, SEEK_SET);            // seek past the header and useless info
+    fseek (s, 12, SEEK_SET);			// seek past the header and useless info
     fread (&info, sizeof (char), 6, s);
 
     if (type[1] != 0 || (type[2] != 2 && type[2] != 3))
         return false;
-
+	
     imageWidth = info[0] + info[1] * 256; 
     imageHeight = info[2] + info[3] * 256;
-    imageBits =    info[4];
+    imageBits =	info[4]; 
 
     size = imageWidth * imageHeight; 
 
@@ -222,13 +222,13 @@ bool CGLTexture::loadTGATexture(char *name, int id)
     glPixelStorei (GL_UNPACK_ALIGNMENT, 1);
     glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-     glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+     glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); 
     glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-     glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+     glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
     glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexEnvf (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-     gluBuild2DMipmaps(GL_TEXTURE_2D,texFormat,imageWidth,imageHeight,texFormat,GL_UNSIGNED_BYTE,imageData);
-    glTexImage2D (GL_TEXTURE_2D, 0, texFormat, imageWidth, imageHeight, 0, texFormat, GL_UNSIGNED_BYTE, imageData);
+	 gluBuild2DMipmaps(GL_TEXTURE_2D,texFormat,imageWidth,imageHeight,texFormat,GL_UNSIGNED_BYTE,imageData);		
+      glTexImage2D (GL_TEXTURE_2D, 0, texFormat, imageWidth, imageHeight, 0, texFormat, GL_UNSIGNED_BYTE, imageData);
 
     /* release data, its been uploaded */
     free (imageData);

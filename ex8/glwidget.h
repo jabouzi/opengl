@@ -4,9 +4,11 @@
 #include <QGLWidget>
 #include <stdio.h>
 #include <math.h>
-//#include <string.h>
+#include <string.h>
 #include "GLTexture.h"
 #include "trackball.h"
+#include <iostream>
+using namespace::std;
 
 #define WINDOW_WIDTH  500
 #define WINDOW_HEIGHT 500
