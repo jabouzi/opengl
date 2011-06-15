@@ -160,7 +160,8 @@ void GLWidget::rotateBy(int xAngle, int yAngle, int zAngle)
 void GLWidget::mousePressEvent(QMouseEvent *event)
 {
     lastPos = event->pos();
-    //qDebug() << lastPos << endl;
+    qDebug() << lastPos << endl;
+    qDebug() << pixelPosToViewPos(lastPos) << endl;
 }
 
 void GLWidget::mouseMoveEvent(QMouseEvent *event)
