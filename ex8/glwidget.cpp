@@ -16,11 +16,11 @@ GLWidget::GLWidget()
 
 void GLWidget::initializeGL()
 {
-    earthTexture.LoadTGA("images/earth.tga");
+    earthTexture.LoadTGA("images/earth_vector.tga");
         // generate our sphere
     for (int x=0; x<=EARTH_LON_RES; x++) {
         for (int y=0; y<=EARTH_LAT_RES; y++) {
-        // angle around y-axis (which is x-value)
+            // angle around y-axis (which is x-value)
             GLfloat    angX, angY;
             angX = (x * 360.0f / EARTH_LON_RES) * PI / 180.0f;
             angY = (-90.f + (y * 180.0f / EARTH_LAT_RES)) * PI / 180.0f;
@@ -29,7 +29,6 @@ void GLWidget::initializeGL()
             vertices[x][y].z = fabsf(cosf(angY)) * EARTH_RADIUS * cosf(angX);
             mapping[x][y].u = (GLfloat)x / EARTH_LON_RES;
             mapping[x][y].v = (GLfloat)y / EARTH_LAT_RES;
-            //qDebug () <<  angX << " - " << angY << endl;
         }
 
     }
@@ -37,35 +36,29 @@ void GLWidget::initializeGL()
 
 void GLWidget::DrawEarth()
 {
-    //glEnable(GL_TEXTURE_2D);
-    //earthTexture.Use();
-    //glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    //glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    glEnable(GL_POLYGON_OFFSET_FILL);
-    glColor3f(0,0,0);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_TEXTURE_2D);
+    earthTexture.Use();
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
     glColor3f(1,1,1);
     int x, y;
     for (y=0; y<EARTH_LAT_RES; y++) {
         glBegin(GL_QUAD_STRIP);
         for (x=0; x<EARTH_LON_RES; x++) {
-            glColor3f(1,0,0);
             glTexCoord2fv((GLfloat*)&mapping[x][y]);
             glVertex3fv((GLfloat*)&vertices[x][y]);
-            glColor3f(1,1,0);
             glTexCoord2fv((GLfloat*)&mapping[x][y+1]);
             glVertex3fv((GLfloat*)&vertices[x][y+1]);
-            glColor3f(1,0,1);
             glTexCoord2fv((GLfloat*)&mapping[x+1][y]);
             glVertex3fv((GLfloat*)&vertices[x+1][y]);
-            glColor3f(0,1,0);
             glTexCoord2fv((GLfloat*)&mapping[x+1][y+1]);
             glVertex3fv((GLfloat*)&vertices[x+1][y+1]);
         }
         glEnd();
     }
-    glDisable(GL_POLYGON_OFFSET_FILL);
 
-    /*glEnable(GL_BLEND);
+    glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glLineWidth(lineWidth);
 
@@ -89,7 +82,7 @@ void GLWidget::DrawEarth()
 
     glDisable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
-    */
+
 }
 
 void GLWidget::LonLat2Point(float lon, float lat, Vector *pos)
@@ -114,12 +107,12 @@ void GLWidget::paintGL()
     glScalef(scaleAll, scaleAll, scaleAll);
     glRotatef(rotY, 1,0,0);
     glRotatef(rotX, 0,1,0);
-    //GLdouble modelview_matrix[16];
-    //glGetDoublev(GL_MODELVIEW_MATRIX, modelview_matrix);
+    GLdouble modelview_matrix[16];
+    glGetDoublev(GL_MODELVIEW_MATRIX, modelview_matrix);
     DrawEarth();
     glPopMatrix();
     //rotY++;
-    rotX++;
+    //rotX++;
 }
 
 
@@ -151,11 +144,47 @@ void GLWidget::timerEvent(QTimerEvent *event)
 QPointF GLWidget::pixelPosToViewPos(const QPointF& p)
 {
 
-     return QPointF(2.0 * float(p.x()) / width() - 1.0,
-                         1.0 - 2.0 * float(p.y()) / height());
+     return QPointF(2.0 * float(p.x()) / width() - 1.0, 1.0 - 2.0 * float(p.y()) / height());
 }
 
+void GLWidget::rotateBy(int xAngle, int yAngle, int zAngle)
+{
+    rotX += xAngle;
+    rotY += yAngle;
+    //zRot += zAngle;
+    updateGL();
+}
 
+void GLWidget::mousePressEvent(QMouseEvent *event)
+{
+    lastPos = event->pos();
+}
+
+void GLWidget::mouseMoveEvent(QMouseEvent *event)
+{
+    int deltX = event->x() - lastPos.x();
+    int deltY = event->y() - lastPos.y();
+
+	if (event->buttons() & Qt::LeftButton) {
+		//rotX += deltX*0.25f/scaleAll;
+		//rotY += deltY*0.25f/scaleAll;
+		rotateBy(1 * deltX, 0 , 0);
+	}
+	//
+
+				// save values for auto rotation
+	//autoRotX = deltX*0.25f;
+	//autoRotY = deltY*0.25f;
+
+	updateGL();
+}
+
+void GLWidget::mouseReleaseEvent(QMouseEvent * /* event */)
+{
+	//emit clicked();
+}
+
+/*
 void GLWidget::mouseMoveEvent(QMouseEvent *e)
 {
     if(e->buttons() & Qt::LeftButton)
@@ -166,13 +195,13 @@ void GLWidget::mouseMoveEvent(QMouseEvent *e)
     } else {
         this->_trackball.release(pixelPosToViewPos(e->posF()), QQuaternion());
     }
-    /*rotX += deltX*0.25f/scaleAll;
+    rotX += deltX*0.25f/scaleAll;
     rotY += deltY*0.25f/scaleAll;
 
                 // save values for auto rotation
     autoRotX = p.x()*0.25f;
     autoRotY = p.x()*0.25f;
-    updateGL();*/
+    updateGL();
 }
 
 void GLWidget::mousePressEvent(QMouseEvent *e)
@@ -180,11 +209,11 @@ void GLWidget::mousePressEvent(QMouseEvent *e)
      if(e->buttons() & Qt::LeftButton)
      {
         this->_trackball.push(pixelPosToViewPos(e->posF()), QQuaternion());
-        //this->_trackball.push(pixelPosToViewPos(e->posF()), this->_trackball2.rotation().conjugate());
+        this->_trackball.push(pixelPosToViewPos(e->posF()), this->_trackball.rotation().conjugate());
         e->accept();
      }
-    /*rotX += autoRotX*scaleAll*0.1f;
-    rotY += autoRotY*scaleAll*0.1f;*/
+    rotX += autoRotX*scaleAll*0.1f;
+    rotY += autoRotY*scaleAll*0.1f;
 }
 
 void GLWidget::mouseReleaseEvent(QMouseEvent *e)
@@ -194,4 +223,4 @@ void GLWidget::mouseReleaseEvent(QMouseEvent *e)
         this->_trackball.release(pixelPosToViewPos(e->posF()),QQuaternion());
         e->accept();
     }
-}
+}*/

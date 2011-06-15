@@ -34,8 +34,10 @@ public:
     GLWidget();
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
+    void rotateBy(int xAngle, int yAngle, int zAngle);
 
 protected:
+    QPoint lastPos;
     GLfloat angle;
     CGLTexture earthTexture;
     Vector vertices[EARTH_LON_RES+1][EARTH_LAT_RES+1];
