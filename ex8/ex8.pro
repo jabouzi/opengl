@@ -21,6 +21,7 @@ HEADERS  += widget.h \
     glwidget.h \
     qtglut.h \
     GLTexture.h \
-    trackball.h
+    trackball.h \
+    countries.h
 
 FORMS    += widget.ui

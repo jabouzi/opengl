@@ -37,8 +37,9 @@ public:
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
     void rotateBy(int xAngle, int yAngle, int zAngle);
+    float time_;
 
-protected:
+protected:    
     QPoint lastPos;
     GLfloat angle;
     CGLTexture earthTexture;

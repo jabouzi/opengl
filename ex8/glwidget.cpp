@@ -3,6 +3,7 @@
 
 #include "glwidget.h"
 #include "qtglut.h"
+#include "countries.h"
 
 GLWidget::GLWidget()
 {
@@ -12,6 +13,7 @@ GLWidget::GLWidget()
     autoRotX = 0, autoRotY = 0;
     scaleAll = 1;
     lineWidth = 1;
+    time_ = 0.0;
 }
 
 void GLWidget::initializeGL()
@@ -46,7 +48,6 @@ void GLWidget::DrawEarth()
     for (y=0; y<EARTH_LAT_RES; y++) {
 		glBegin(GL_QUAD_STRIP);
         for (x=0; x<EARTH_LON_RES; x++) {
-
             glTexCoord2fv((GLfloat*)&mapping[x][y]);
             glVertex3fv((GLfloat*)&vertices[x][y]);
             glTexCoord2fv((GLfloat*)&mapping[x][y+1]);
@@ -58,7 +59,23 @@ void GLWidget::DrawEarth()
         }
 		glEnd();
     }
-    
+
+    Vector	country_names_pos[NUM_COUNTRIES];
+    for (int i=0; i<NUM_COUNTRIES-1; i++) {
+
+                LonLat2Point(countries[i].lon, countries[i].lat, &country_names_pos[i]);
+               // cout << country_names_pos[i].x << " - " << country_names_pos[i].y << endl;
+                glPushMatrix();
+
+                glTranslatef(country_names_pos[i].x, country_names_pos[i].y, country_names_pos[i].z);
+                glColor3f(1,0,0);
+                float radius;
+                radius = 20+10*sinf(i+time_);
+                glutSolidCube(radius);
+
+                glPopMatrix();
+            }
+    //qDebug() << country_names_pos.x << country_names_pos.y << endl;
     /*glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glLineWidth(lineWidth);
@@ -102,7 +119,8 @@ void GLWidget::LonLat2Point(float lon, float lat, Vector *pos)
 void GLWidget::paintGL()
 {
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-    glPushMatrix();
+    glPushMatrix();   
+    time_ += 0.1;
     glTranslatef(0,0,-125);
     glScalef(WORLD_SCALE, WORLD_SCALE, WORLD_SCALE);
     glScalef(scaleAll, scaleAll, scaleAll);
@@ -160,8 +178,8 @@ void GLWidget::rotateBy(int xAngle, int yAngle, int zAngle)
 void GLWidget::mousePressEvent(QMouseEvent *event)
 {
     lastPos = event->pos();
-    qDebug() << lastPos << endl;
-    qDebug() << pixelPosToViewPos(lastPos) << endl;
+    //qDebug() << lastPos << endl;
+    //qDebug() << pixelPosToViewPos(lastPos) << endl;
 }
 
 void GLWidget::mouseMoveEvent(QMouseEvent *event)
