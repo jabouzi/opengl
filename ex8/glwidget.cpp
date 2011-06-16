@@ -7,13 +7,15 @@
 
 GLWidget::GLWidget()
 {
-    startTimer( 30 );
+    //startTimer( 30 );
     angle = 45.0;
     rotX = 0, rotY = 0;
     autoRotX = 0, autoRotY = 0;
     scaleAll = 1;
     lineWidth = 1;
     time_ = 0.0;
+    temp1 = 0;
+    temp2 = 0;
 }
 
 void GLWidget::initializeGL()
@@ -30,7 +32,7 @@ void GLWidget::initializeGL()
 			vertices[x][y].y = EARTH_RADIUS * sinf(angY);
 			vertices[x][y].z = fabsf(cosf(angY)) * EARTH_RADIUS * cosf(angX);
 			mapping[x][y].u = (float)x / EARTH_LON_RES;
-			mapping[x][y].v = (float)y / EARTH_LAT_RES;
+			mapping[x][y].v = (float)y / EARTH_LAT_RES;			
         }
     }
 }
@@ -129,9 +131,21 @@ void GLWidget::paintGL()
     GLdouble modelview_matrix[16];
     glGetDoublev(GL_MODELVIEW_MATRIX, modelview_matrix);
     DrawEarth();
-    glPopMatrix();
+    glPopMatrix();        
+    /*if (abs(rotX) > 360) rotX = rotX - 360;
+    if (rotX < 0) rotX = 0 - rotX;
+    if (abs(rotY) > 360) rotY = rotY - 360;
+    if (rotY < 0) rotY = 0 - rotY;
+    //modf(180.0f, &rotX); //= rotX % 180;*/
+    //rotY = (int)rotY % 180;
+    //rotX = (int)rotX % 360;
+    
+    qDebug() << rotX << " - " << rotY;
+    //qDebug() << temp1 << " - " << temp2;
     //rotY++;
     //rotX++;
+    //qDebug() << typeof(rotX) << endl;
+
 }
 
 
@@ -162,7 +176,6 @@ void GLWidget::timerEvent(QTimerEvent *event)
 
 QPointF GLWidget::pixelPosToViewPos(const QPointF& p)
 {
-
      return QPointF(2.0 * float(p.x()) / width() - 1.0, 1.0 - 2.0 * float(p.y()) / height());
 }
 

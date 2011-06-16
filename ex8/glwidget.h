@@ -48,6 +48,8 @@ protected:
     float rotX, rotY, autoRotX, autoRotY, scaleAll;
     TrackBall _trackball;
     int lineWidth;
+    float temp1;
+    float temp2;
 
     void initializeGL();
     void paintGL();
