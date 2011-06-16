@@ -8,7 +8,7 @@ GLWidget::GLWidget()
 {
     startTimer( 30 );
     angle = 45.0;
-    rotX = 140, rotY = 0;
+    rotX = 0, rotY = 0;
     autoRotX = 0, autoRotY = 0;
     scaleAll = 1;
     lineWidth = 1;
