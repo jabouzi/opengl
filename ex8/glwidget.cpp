@@ -9,7 +9,11 @@ GLWidget::GLWidget()
 {
     //startTimer( 30 );
     angle = 45.0;
-    rotX = 0, rotY = 0;
+    rotX = -360, rotY = 0;
+    //rotX = (180.f+45.5089);
+    //rotY = -73.5542+180.f;
+    //rotX = (45.5089 * 360.f / EARTH_LON_RES) * PI / 180.f;
+	//rotY = (-90.f + (-73.5542 * 180.f / EARTH_LAT_RES)) * PI / 180.f;
     autoRotX = 0, autoRotY = 0;
     scaleAll = 1;
     lineWidth = 1;
@@ -145,6 +149,11 @@ void GLWidget::paintGL()
     //rotY++;
     //rotX++;
     //qDebug() << typeof(rotX) << endl;
+    //float    angX, angY;
+    //angX = (180.f+45.5089);
+    //angY = 180.f+(-73.5542);
+    //glRotatef(angY, 1,0,0);
+    //glRotatef(angX, 0,1,0);
 
 }
 
