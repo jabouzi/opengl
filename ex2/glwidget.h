@@ -5,6 +5,15 @@
 
 #define WINDOW_WIDTH  250
 #define WINDOW_HEIGHT 250
+#define PI 3.141592654
+#define TWOPI 6.283185308
+
+
+struct XYZ
+{
+	int x,y,z;
+};
+
 
 class GLWidget : public QGLWidget
 {
@@ -18,6 +27,7 @@ protected:
 	void initializeGL();
 	void paintGL();
 	void resizeGL(int width, int height);
+	void CreateSphere(XYZ, double, int);
 };
 
 #endif // __GLWIDGET_H__

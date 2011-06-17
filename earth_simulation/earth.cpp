@@ -125,7 +125,7 @@ Vxp *load_bdv(char *pFileName)
 			fread(lonlat, 8, 1, f);
 
 			// project on sphere
-			LonLat2Point(lonlat[1], lonlat[0], &vxp->pFeatures[i].pVerts[j]);
+			//LonLat2Point(lonlat[1], lonlat[0], &vxp->pFeatures[i].pVerts[j]);
 		}
 	}
 
@@ -263,7 +263,7 @@ void DrawVxp(Vxp *vxp)
 
 		// run over all vertices in this feature
 		for (int j=0; j<vxp->pFeatures[i].nVerts; j++) {
-			glVertex3fv((float*)&vxp->pFeatures[i].pVerts[j]);
+			//glVertex3fv((float*)&vxp->pFeatures[i].pVerts[j]);
 		}
 		
 		glEnd();
@@ -336,7 +336,7 @@ void DrawScene()
 		for (int i=0; i<NUM_COUNTRIES-1; i++) {
 
 			LonLat2Point(countries[i].lon, countries[i].lat, &country_names_pos[i]);
-
+            cout << country_names_pos[i].x << " - " << country_names_pos[i].y << endl;
 			glPushMatrix();
 
 			glTranslatef(country_names_pos[i].x, country_names_pos[i].y, country_names_pos[i].z);

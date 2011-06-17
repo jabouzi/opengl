@@ -9,7 +9,7 @@ GLWidget::GLWidget()
 {
     //startTimer( 30 );
     angle = 45.0;
-    rotX = -360, rotY = 0;
+    rotX = 180, rotY = 0;
     //rotX = (180.f+45.5089);
     //rotY = -73.5542+180.f;
     //rotX = (45.5089 * 360.f / EARTH_LON_RES) * PI / 180.f;
@@ -111,8 +111,8 @@ void GLWidget::DrawEarth()
 
 void GLWidget::LonLat2Point(float lon, float lat, Vector *pos)
 {
-    // lon -90..90
-    // lat -180..180
+    // lat -90..90 => Y
+    // lon -180..180 => X
     float    angX, angY;
     angX = (180.f+lat) * PI / 180.f;
     angY = lon * PI / 180.f;
@@ -173,10 +173,10 @@ QSize GLWidget::minimumSizeHint() const
     return QSize(50, 50);
 }
 
-QSize GLWidget::sizeHint() const
+/*QSize GLWidget::sizeHint() const
 {
    return QSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-}
+}*/
 
 void GLWidget::timerEvent(QTimerEvent *event)
 {
@@ -191,8 +191,8 @@ QPointF GLWidget::pixelPosToViewPos(const QPointF& p)
 
 void GLWidget::rotateBy(int xAngle, int yAngle, int zAngle)
 {
-    rotX += xAngle;
-    rotY += yAngle;
+    rotX = xAngle;
+    rotY = yAngle;
     //zRot += zAngle;
     updateGL();
 }
@@ -201,7 +201,7 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
 {
     lastPos = event->pos();
     //qDebug() << lastPos << endl;
-    //qDebug() << pixelPosToViewPos(lastPos) << endl;
+    qDebug() << pixelPosToViewPos(lastPos) << endl;
 }
 
 void GLWidget::mouseMoveEvent(QMouseEvent *event)
@@ -229,6 +229,13 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
 		if (addition > 0 && scaleAll+addition < MAX_SCALE) {
 			scaleAll += addition;
 		}
+	}
+	else if (event->buttons() & Qt::RightButton) {
+		rotateBy(9.537499, 33.886917, 0);
+		qDebug() << "right";
+		//rotY = 45.5089; 9.537499
+		//rotX = -73.5542; 33.886917
+		updateGL();
 	}
 	//
 	lastPos = event->pos();

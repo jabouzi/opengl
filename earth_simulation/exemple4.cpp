@@ -95,7 +95,7 @@ void init (void) {
     glCullFace(GL_BACK);    
     glFrontFace(GL_CCW);    
     glEnable(GL_CULL_FACE);    
-    texture[0] = LoadTextureRAW( "earth_vector.png" );    
+    texture[0] = LoadTextureRAW( "earth.raw" );    
     CreateSphere(70,0,0,0);
 }
 

@@ -10,8 +10,8 @@
 #include <iostream>
 using namespace::std;
 
-#define WINDOW_WIDTH  500
-#define WINDOW_HEIGHT 500
+//#define WINDOW_WIDTH  500
+//#define WINDOW_HEIGHT 500
 #define PI 3.14159265
 #define EARTH_LON_RES    60    // Longitude Resolution (x)
 #define EARTH_LAT_RES    60    // Latitude Resolution (y)
@@ -35,7 +35,7 @@ Q_OBJECT
 public:
     GLWidget();
     QSize minimumSizeHint() const;
-    QSize sizeHint() const;
+    //QSize sizeHint() const;
     void rotateBy(int xAngle, int yAngle, int zAngle);
     float time_;
 

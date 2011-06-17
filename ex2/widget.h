@@ -4,6 +4,7 @@
 #include <QWidget>
 #include "glwidget.h"
 
+
 namespace Ui {
     class Widget;
 }
@@ -18,7 +19,7 @@ public:
 
 private:
     Ui::Widget *ui;
-    GLWidget *glWidget;
+    GLWidget *glWidget;    
 };
 
 #endif // WIDGET_H
