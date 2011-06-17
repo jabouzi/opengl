@@ -20,12 +20,15 @@ public:
 private:
     Ui::MainWindow *ui;
     GLWidget *glWidget;
+    QStringList list;
     
 protected:
     void paintEvent(QPaintEvent *); 
 
 private slots:
      void updateRotations();
+     void rotateEarth();
+     void updateSkin();
 
 };
 

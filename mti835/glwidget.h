@@ -6,7 +6,6 @@
 #include <math.h>
 #include <string.h>
 #include "GLTexture.h"
-//#include "trackball.h"
 #include <iostream>
 using namespace::std;
 
@@ -37,9 +36,11 @@ public:
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
     void rotateBy(int xAngle, int yAngle, int zAngle);
+    void setSkin(int);
     float getRotX();
     float getRotY();
     float getRotZ();
+    void updateEarth();
 
 private:
     float time_;
@@ -49,10 +50,11 @@ private:
     Vector vertices[EARTH_LON_RES+1][EARTH_LAT_RES+1];
     Mapping mapping[EARTH_LON_RES+1][EARTH_LAT_RES+1];
     float rotX, rotY, autoRotX, autoRotY, scaleAll;
-    //TrackBall _trackball;
+    QStringList skinsList;
     int lineWidth;
     float temp1;
     float temp2;
+    QString skin;
 
     void initializeGL();
     void paintGL();

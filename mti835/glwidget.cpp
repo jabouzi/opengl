@@ -7,27 +7,24 @@
 
 GLWidget::GLWidget()
 {
-	//glClearColor(1.0, 1.0, 1.0, 0.0);
+    //glClearColor(1.0, 1.0, 1.0, 0.0);
     //glMatrixMode(GL_PROJECTION);
     //gluOrtho2D(0.0, 600, 0.0, 300);
     //startTimer( 30 );
     angle = 45.0;
     rotX = 180, rotY = 0;
-    //rotX = (180.f+45.5089);
-    //rotY = -73.5542+180.f;
-    //rotX = (45.5089 * 360.f / EARTH_LON_RES) * PI / 180.f;
-	//rotY = (-90.f + (-73.5542 * 180.f / EARTH_LAT_RES)) * PI / 180.f;
     autoRotX = 0, autoRotY = 0;
     scaleAll = 1;
     lineWidth = 1;
     time_ = 0.0;
     temp1 = 0;
     temp2 = 0;
+    skinsList << "images/earth.tga" << "images/earth_elevation.tga" << "images/earth_vector.tga";
+    setSkin(0);
 }
 
 void GLWidget::initializeGL()
-{
-    earthTexture.LoadTGA("images/earth_vector.tga");
+{   
         // generate our sphere
     for (int x=0; x<=EARTH_LON_RES; x++) {
         for (int y=0; y<=EARTH_LAT_RES; y++) {
@@ -44,9 +41,19 @@ void GLWidget::initializeGL()
     }
 }
 
+void GLWidget::setSkin(int listIndex)
+{
+    skin = skinsList.at(listIndex);
+}
+
+void GLWidget::updateEarth()
+{
+     updateGL();
+}
+
 void GLWidget::drawEarth()
 {
-
+    earthTexture.LoadTGA(skin.toLatin1().data());
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
     earthTexture.Use();
@@ -127,7 +134,7 @@ void GLWidget::lonLat2Point(float lon, float lat, Vector *pos)
 
 void GLWidget::paintGL()
 {
-	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     glPushMatrix();   
     time_ += 0.1;
@@ -195,8 +202,8 @@ QPointF GLWidget::pixelPosToViewPos(const QPointF& p)
 
 void GLWidget::rotateBy(int xAngle, int yAngle, int zAngle)
 {
-    rotX = xAngle;
-    rotY = yAngle;
+    rotX += xAngle;
+    rotY += yAngle;
     //zRot += zAngle;
     updateGL();
 }
@@ -234,13 +241,13 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
 			scaleAll += addition;
 		}
 	}
-	else if (event->buttons() & Qt::RightButton) {
+        /*else if (event->buttons() & Qt::RightButton) {
 		rotateBy(9.537499, 33.886917, 0);
 		qDebug() << "right";
 		//rotY = 45.5089; 9.537499
 		//rotX = -73.5542; 33.886917
 		updateGL();
-	}
+        }*/
 	//
 	lastPos = event->pos();
 				// save values for auto rotation
