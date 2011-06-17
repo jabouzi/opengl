@@ -155,7 +155,7 @@ void GLWidget::paintGL()
     //rotY = (int)rotY % 180;
     //rotX = (int)rotX % 360;
     
-    qDebug() << rotX << " - " << rotY;
+    //qDebug() << rotX << " - " << rotY;
     //qDebug() << temp1 << " - " << temp2;
     //rotY++;
     //rotX++;
@@ -202,7 +202,7 @@ QPointF GLWidget::pixelPosToViewPos(const QPointF& p)
 
 void GLWidget::rotateBy(int xAngle, int yAngle, int zAngle)
 {
-    rotX += xAngle;
+    rotX -= xAngle;
     rotY += yAngle;
     //zRot += zAngle;
     updateGL();
