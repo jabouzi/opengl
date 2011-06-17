@@ -212,7 +212,7 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
 {
     lastPos = event->pos();
     //qDebug() << lastPos << endl;
-    qDebug() << pixelPosToViewPos(lastPos) << endl;
+    //qDebug() << pixelPosToViewPos(lastPos) << endl;
 }
 
 void GLWidget::mouseMoveEvent(QMouseEvent *event)
