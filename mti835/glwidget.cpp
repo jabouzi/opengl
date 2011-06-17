@@ -7,6 +7,9 @@
 
 GLWidget::GLWidget()
 {
+	//glClearColor(1.0, 1.0, 1.0, 0.0);
+    //glMatrixMode(GL_PROJECTION);
+    //gluOrtho2D(0.0, 600, 0.0, 300);
     //startTimer( 30 );
     angle = 45.0;
     rotX = 180, rotY = 0;
@@ -41,7 +44,7 @@ void GLWidget::initializeGL()
     }
 }
 
-void GLWidget::DrawEarth()
+void GLWidget::drawEarth()
 {
 
     glEnable(GL_DEPTH_TEST);
@@ -69,7 +72,7 @@ void GLWidget::DrawEarth()
     Vector	country_names_pos[NUM_COUNTRIES];
     for (int i=0; i<NUM_COUNTRIES-1; i++) {
 
-                LonLat2Point(countries[i].lon, countries[i].lat, &country_names_pos[i]);
+                lonLat2Point(countries[i].lon, countries[i].lat, &country_names_pos[i]);
                // cout << country_names_pos[i].x << " - " << country_names_pos[i].y << endl;
                 glPushMatrix();
 
@@ -109,7 +112,7 @@ void GLWidget::DrawEarth()
 
 }
 
-void GLWidget::LonLat2Point(float lon, float lat, Vector *pos)
+void GLWidget::lonLat2Point(float lon, float lat, Vector *pos)
 {
     // lat -90..90 => Y
     // lon -180..180 => X
@@ -124,6 +127,7 @@ void GLWidget::LonLat2Point(float lon, float lat, Vector *pos)
 
 void GLWidget::paintGL()
 {
+	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     glPushMatrix();   
     time_ += 0.1;
@@ -134,7 +138,7 @@ void GLWidget::paintGL()
     glRotatef(rotX, 0,1,0);
     GLdouble modelview_matrix[16];
     glGetDoublev(GL_MODELVIEW_MATRIX, modelview_matrix);
-    DrawEarth();
+    drawEarth();
     glPopMatrix();        
     /*if (abs(rotX) > 360) rotX = rotX - 360;
     if (rotX < 0) rotX = 0 - rotX;
@@ -244,11 +248,12 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
 	//autoRotY = deltY*0.25f;
 
 	updateGL();
+	emit rotationsChanged();
 }
 
 void GLWidget::mouseReleaseEvent(QMouseEvent * /* event */)
 {
-	emit rotationsChanged();
+	//emit rotationsChanged();
 }
 
 float GLWidget::getRotX()

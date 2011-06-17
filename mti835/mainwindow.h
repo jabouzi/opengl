@@ -1,7 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
+#include <QMainWindow> 
+#include <QPainter>
 #include "glwidget.h"
 
 namespace Ui {
@@ -18,7 +19,10 @@ public:
 
 private:
     Ui::MainWindow *ui;
-     GLWidget *glWidget;
+    GLWidget *glWidget;
+    
+protected:
+    void paintEvent(QPaintEvent *); 
 
 private slots:
      void updateRotations();

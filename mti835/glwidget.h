@@ -58,12 +58,13 @@ private:
     void paintGL();
     void resizeGL(int, int);
     void timerEvent(QTimerEvent *event);
-    void DrawEarth();
-    void LonLat2Point(float , float , Vector *);
+    void drawEarth();
+    void lonLat2Point(float , float , Vector *);
     void mouseMoveEvent(QMouseEvent *e);
     void mousePressEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *);
     QPointF pixelPosToViewPos(const QPointF&);
+    void drawAxis();
 
 signals:
      void rotationsChanged();
