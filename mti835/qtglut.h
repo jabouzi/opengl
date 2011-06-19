@@ -17,6 +17,31 @@
 
 #include <QtOpenGL>
 
+typedef struct {
+   float x;
+   float y;
+} CoordRec, *CoordPtr;
+
+typedef struct {
+   int num_coords;
+   const CoordRec *coord;
+} StrokeRec, *StrokePtr;
+
+typedef struct {
+   int num_strokes;
+   const StrokeRec *stroke;
+   float center;
+   float right;
+} StrokeCharRec, *StrokeCharPtr;
+
+typedef struct {
+   const char *name;
+   int num_chars;
+   const StrokeCharRec *ch;
+   float top;
+   float bottom;
+} StrokeFontRec, *StrokeFontPtr;
+
 void glutWireCube(GLdouble size);
 void glutSolidCube(GLdouble size);
 
@@ -25,5 +50,10 @@ void glutSolidTorus(GLdouble innerRadius, GLdouble outerRadius, GLint nsides, GL
 
 void glutSolidSphere(GLdouble radius, GLint slices, GLint stacks);
 void glutWireSphere(GLdouble radius, GLint slices, GLint stacks);
+
+//void *__glutFont();
+
+//void glutStrokeCharacter( int character);
+//void glutBitmapCharacter(void *font, int character);
 
 #endif // __QTGLUT_H__

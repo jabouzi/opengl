@@ -33,14 +33,6 @@ void MainWindow::updateSkin()
    glWidget->updateEarth();
 }
 
-void MainWindow::paintEvent(QPaintEvent *)
-{
-    QLineF line(0.0, 0.0, 100.0, 100.0);
-	QPainter painter(this);
-	painter.setPen(Qt::white);
-	painter.drawLine(line);
-}
-
 MainWindow::~MainWindow()
 {
     delete ui;

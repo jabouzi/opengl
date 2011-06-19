@@ -6,6 +6,8 @@
 #include <math.h>
 #include <string.h>
 #include "GLTexture.h"
+#include "vmath.h"
+#include "markers_parser.h"
 #include <iostream>
 using namespace::std;
 
@@ -51,6 +53,8 @@ private:
     Mapping mapping[EARTH_LON_RES+1][EARTH_LAT_RES+1];
     float rotX, rotY, autoRotX, autoRotY, scaleAll;
     QStringList skinsList;
+    int idsList[3];
+    int currentSkinId;
     int lineWidth;
     float temp1;
     float temp2;
@@ -67,6 +71,7 @@ private:
     void mouseReleaseEvent(QMouseEvent *);
     QPointF pixelPosToViewPos(const QPointF&);
     void drawAxis();
+    void draw_markers(char *, int, unsigned, unsigned);
 
 signals:
      void rotationsChanged();

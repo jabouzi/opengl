@@ -6,6 +6,9 @@
 #define __GLTexture_h_
 
 #include <QtOpenGL>
+#include <iostream>
+
+using namespace::std;
 
 class CGLTexture
 {
@@ -16,6 +19,7 @@ public:
 	// Create and load the files.
 	bool LoadTGA(char* fileName);
 	void Use();
+	int getTextureId();
 
 protected:
 	int checkSize (int x);
@@ -23,7 +27,7 @@ protected:
 	unsigned char* getRGB (FILE *s, int size);
 	unsigned char* getGray (FILE *s, int size);
 	unsigned char* getData (FILE *s, int sz, int iBits);
-	bool loadTGATexture(char *name, int id);
+	bool loadTGATexture(char *name, int id);	
 
 	unsigned int m_textureID;
 	int m_nWidth, m_nHeight;

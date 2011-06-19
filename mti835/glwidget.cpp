@@ -20,11 +20,18 @@ GLWidget::GLWidget()
     temp1 = 0;
     temp2 = 0;
     skinsList << "images/earth.tga" << "images/earth_elevation.tga" << "images/earth_vector.tga";
-    setSkin(0);
+    currentSkinId = 1;
 }
 
 void GLWidget::initializeGL()
 {   
+    //skin = skinsList.at(0);
+    for(int i = 0; i < skinsList.count(); i++ )
+    {
+        earthTexture.LoadTGA(skinsList.at(i).toLatin1().data());
+        idsList[i] = earthTexture.getTextureId();
+        //qDebug() << idsList.at(i) ;
+    }
         // generate our sphere
     for (int x=0; x<=EARTH_LON_RES; x++) {
         for (int y=0; y<=EARTH_LAT_RES; y++) {
@@ -43,20 +50,119 @@ void GLWidget::initializeGL()
 
 void GLWidget::setSkin(int listIndex)
 {
-    skin = skinsList.at(listIndex);
+    //skin = skinsList.at(listIndex);
+     qDebug() << idsList[0] << idsList[1]  << idsList[2] ;
+     currentSkinId = idsList[listIndex];
+     if (currentSkinId == 0) currentSkinId = 1;
+    //earthTexture.LoadTGA(skinsList.at(listIndex).toLatin1().data());
 }
 
 void GLWidget::updateEarth()
 {
-     updateGL();
+    //initializeGL();
+    updateGL();
 }
+
+void GLWidget::draw_markers(char * markerfile, int bitmap_mode, unsigned mcol, unsigned lcol)
+{
+    static Marker * marker;
+    static int init=0;
+    static int markernr;
+    int i;
+    double th,ph;
+    static int markers_id;
+//    static float matrix[16];
+    VMvect bx, by;
+    float marker_h = 0.02;
+    float m[16];
+    float vx,vy,vz;
+
+    if(!init){
+        init=1;
+        /*if(markerfile!=(char *)NULL){
+            marker=load_markers(markerfile,&markernr);
+        } else {
+            marker=load_markers("xglobe-markers",&markernr);
+        }*/
+//        marker=load_markers("earth-markers-schaumann",&markernr);
+/*#ifdef DEBUG
+        fprintf(stderr,"markernr=%d\n",markernr);
+        fprintf(stderr,"marker[0].name=%s\n",marker[0].name);
+        fprintf(stderr,"marker[N-1].name=%s\n",marker[markernr-1].name);
+#endif*/
+        markers_id = glGenLists(1);
+        glNewList(markers_id, GL_COMPILE);
+//        glColor3f((double)((mcol>>16) & 0xFF)/255.0,
+//                  (double)((mcol>> 8) & 0xFF)/255.0,
+//                  (double)((mcol>> 0) & 0xFF)/255.0);
+       // glColor4ubv((GLubyte *)&mcol);
+        //glDisable(GL_LIGHTING);
+        glDisable(GL_TEXTURE_2D);
+        glBegin(GL_LINES);
+
+        for (int i=0; i<NUM_COUNTRIES-1; i++) {
+            th=(90.0-countries[i].lon)*M_PI/180.0;
+            ph=countries[i].lat*M_PI/180.0;
+            glVertex3f(0.25*sin(th)*cos(ph),
+                       0.25*sin(th)*sin(ph),
+                       0.25*cos(th));
+            glVertex3f((0.25+marker_h)*sin(th)*cos(ph),
+                       (0.25+marker_h)*sin(th)*sin(ph),
+                       (0.25+marker_h)*cos(th));
+        }
+        glEnd();
+        //glEnable(GL_LIGHTING);
+        glEnable(GL_TEXTURE_2D);
+        glEndList();
+    }
+
+    glCallList(markers_id);
+
+//    glColor3f((double)((lcol>>16) & 0xFF)/255.0,
+//              (double)((lcol>> 8) & 0xFF)/255.0,
+//              (double)((lcol>> 0) & 0xFF)/255.0);
+    //glColor4ubv((GLubyte *)&lcol);
+    //glDisable(GL_LIGHTING);
+    glDisable(GL_TEXTURE_2D);
+
+    /*if(!bitmap_mode){
+        bx=vec_xyz(1.0,0.0,0.0);
+        by=vec_xyz(0.15,1.0,0.0);
+        glGetFloatv( GL_MODELVIEW_MATRIX, m );
+        vx=bx.x; vy=bx.y; vz=bx.z;
+        bx.x=vx*m[0]+vy*m[1]+vz*m[2];
+        bx.y=vx*m[4]+vy*m[5]+vz*m[6];
+        bx.z=vx*m[8]+vy*m[9]+vz*m[10];
+        vx=by.x; vy=by.y; vz=by.z;
+        by.x=vx*m[0]+vy*m[1]+vz*m[2];
+        by.y=vx*m[4]+vy*m[5]+vz*m[6];
+        by.z=vx*m[8]+vy*m[9]+vz*m[10];
+    }*/
+    //for(i=0;i<markernr;i++){
+        //th=(90.0-marker[i].lon)*M_PI/180.0;
+        //ph=marker[i].lat*M_PI/180.0;
+        //myGlWrite(
+                  //vec_xyz((0.25+marker_h*1.1)*sin(th)*cos(ph),
+                  //        (0.25+marker_h*1.1)*sin(th)*sin(ph),
+                  //        (0.25+marker_h*1.1)*cos(th)),
+                  //bx, by,
+                  //0,  /* 1/0: take screen/absolute directions for bx, by */
+                  //0.005,
+                  //bitmap_mode,  /* bitmap mode */
+                  //marker[i].name
+                 //);
+    //}
+    //glEnable(GL_LIGHTING);
+    glEnable(GL_TEXTURE_2D);
+}
+
 
 void GLWidget::drawEarth()
 {
-    earthTexture.LoadTGA(skin.toLatin1().data());
+     double th,ph;
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
-    earthTexture.Use();
+    glBindTexture(GL_TEXTURE_2D, currentSkinId);
     glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
     glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
     glColor3f(1,1,1);
@@ -87,10 +193,36 @@ void GLWidget::drawEarth()
                 glColor3f(1,0,0);
                 float radius;
                 radius = 20+10*sinf(i+time_);
+                qDebug() << radius;
                 glutSolidCube(radius);
 
                 glPopMatrix();
             }
+    //glPushMatrix();
+    /*glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glLineWidth(lineWidth);
+    glBegin(GL_LINES);
+    glColor3f(1,0,0);
+
+    for (int i=0; i<NUM_COUNTRIES-1; i++) {
+        lonLat2Point(countries[i].lon, countries[i].lat, &country_names_pos[i]);
+       // cout << country_names_pos[i].x << " - " << country_names_pos[i].y << endl;
+        glPushMatrix();
+
+        glTranslatef(country_names_pos[i].x, country_names_pos[i].y, country_names_pos[i].z);
+        th=(90.0-countries[i].lon)*M_PI/180.0;
+        ph=countries[i].lat*M_PI/180.0;
+        glVertex3f(0.25*sin(th)*cos(ph),
+                   0.25*sin(th)*sin(ph),
+                   0.25*cos(th));
+        glVertex3f((0.25+ 0.02)*sin(th)*cos(ph),
+                   (0.25+ 0.02)*sin(th)*sin(ph),
+                   (0.25+ 0.02)*cos(th));
+    }
+    glEnd();
+    glDisable(GL_BLEND);*/
+    //glPopMatrix();
     //qDebug() << country_names_pos.x << country_names_pos.y << endl;
     /*glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -146,26 +278,8 @@ void GLWidget::paintGL()
     GLdouble modelview_matrix[16];
     glGetDoublev(GL_MODELVIEW_MATRIX, modelview_matrix);
     drawEarth();
-    glPopMatrix();        
-    /*if (abs(rotX) > 360) rotX = rotX - 360;
-    if (rotX < 0) rotX = 0 - rotX;
-    if (abs(rotY) > 360) rotY = rotY - 360;
-    if (rotY < 0) rotY = 0 - rotY;
-    //modf(180.0f, &rotX); //= rotX % 180;*/
-    //rotY = (int)rotY % 180;
-    //rotX = (int)rotX % 360;
-    
-    //qDebug() << rotX << " - " << rotY;
-    //qDebug() << temp1 << " - " << temp2;
-    //rotY++;
-    //rotX++;
-    //qDebug() << typeof(rotX) << endl;
-    //float    angX, angY;
-    //angX = (180.f+45.5089);
-    //angY = 180.f+(-73.5542);
-    //glRotatef(angY, 1,0,0);
-    //glRotatef(angX, 0,1,0);
-
+    //draw_markers( "xglobe-markers", 0, 0x000000FF, 0x00FFFFFF );
+    glPopMatrix();
 }
 
 
@@ -277,44 +391,3 @@ float GLWidget::getRotZ()
 {
 	return 0.0;
 }
-
-/*
-void GLWidget::mouseMoveEvent(QMouseEvent *e)
-{
-    if(e->buttons() & Qt::LeftButton)
-    {
-        this->_trackball.move(pixelPosToViewPos(e->posF()), QQuaternion());
-        updateGL();
-        e->accept();
-    } else {
-        this->_trackball.release(pixelPosToViewPos(e->posF()), QQuaternion());
-    }
-    rotX += deltX*0.25f/scaleAll;
-    rotY += deltY*0.25f/scaleAll;
-
-                // save values for auto rotation
-    autoRotX = p.x()*0.25f;
-    autoRotY = p.x()*0.25f;
-    updateGL();
-}
-
-void GLWidget::mousePressEvent(QMouseEvent *e)
-{
-     if(e->buttons() & Qt::LeftButton)
-     {
-        this->_trackball.push(pixelPosToViewPos(e->posF()), QQuaternion());
-        this->_trackball.push(pixelPosToViewPos(e->posF()), this->_trackball.rotation().conjugate());
-        e->accept();
-     }
-    rotX += autoRotX*scaleAll*0.1f;
-    rotY += autoRotY*scaleAll*0.1f;
-}
-
-void GLWidget::mouseReleaseEvent(QMouseEvent *e)
-{
-    if(e->buttons() & Qt::LeftButton)
-    {
-        this->_trackball.release(pixelPosToViewPos(e->posF()),QQuaternion());
-        e->accept();
-    }
-}*/

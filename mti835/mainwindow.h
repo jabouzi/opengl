@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow> 
-#include <QPainter>
 #include "glwidget.h"
 
 namespace Ui {
@@ -22,9 +21,6 @@ private:
     GLWidget *glWidget;
     QStringList list;
     
-protected:
-    void paintEvent(QPaintEvent *); 
-
 private slots:
      void updateRotations();
      void rotateEarth();

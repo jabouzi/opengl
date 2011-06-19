@@ -19,6 +19,11 @@ void CGLTexture::Use()
 	glBindTexture(GL_TEXTURE_2D, m_textureID);
 }
 
+int CGLTexture::getTextureId()
+{
+	return m_textureID;
+}
+
 bool CGLTexture::LoadTGA(char* fileName)
 {
 	glGenTextures(1, &m_textureID);
@@ -178,6 +183,7 @@ id is the texture ID to bind too.
 */
 bool CGLTexture::loadTGATexture(char *name, int id)
 {
+    cout << id << endl;
     unsigned char type[4];
     unsigned char info[7];
     unsigned char *imageData = NULL;
