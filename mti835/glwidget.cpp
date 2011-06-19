@@ -11,14 +11,12 @@ GLWidget::GLWidget()
     //glMatrixMode(GL_PROJECTION);
     //gluOrtho2D(0.0, 600, 0.0, 300);
     //startTimer( 30 );
-    angle = 45.0;
+    angleX = 0, angleY = 0;
     rotX = 180, rotY = 0;
     autoRotX = 0, autoRotY = 0;
     scaleAll = 1;
     lineWidth = 1;
     time_ = 0.0;
-    temp1 = 0;
-    temp2 = 0;
     skinsList << "images/earth.tga" << "images/earth_elevation.tga" << "images/earth_vector.tga";
     currentSkinId = 1;
 }
@@ -188,16 +186,66 @@ void GLWidget::drawEarth()
                 lonLat2Point(countries[i].lon, countries[i].lat, &country_names_pos[i]);
                // cout << country_names_pos[i].x << " - " << country_names_pos[i].y << endl;
                 glPushMatrix();
-
+               // qDebug() << country_names_pos[i].x <<  country_names_pos[i].y << country_names_pos[i].z;
                 glTranslatef(country_names_pos[i].x, country_names_pos[i].y, country_names_pos[i].z);
-                glColor3f(1,0,0);
+                glColor3f(0,1,1);
                 float radius;
                 radius = 20+10*sinf(i+time_);
-                qDebug() << radius;
-                glutSolidCube(radius);
+                //qDebug() << radius;
+                glutSolidCube( radius);
+
+               // glColor3f(1,0,1); glBegin(GL_TRIANGLES);//glBegin(GL_LINES);
+                 /*glVertex3f(0.25*sin(th)*cos(ph),
+                            0.25*sin(th)*sin(ph),
+                            0.25*cos(th));
+                 glVertex3f((0.25+ 0.02)*sin(th)*cos(ph),
+                            (0.25+ 0.02)*sin(th)*sin(ph),
+                            (0.25+ 0.02)*cos(th));*/
+                // glVertex2f(0,0);
+                // glVertex2f(10,10);
+               //  glEnd();
 
                 glPopMatrix();
             }
+     glColor3f(1,1,1);
+     //renderText(0, 0,0,"Skander");
+   /* GLdouble projection_matrix[16];
+            GLint	 viewport[4];
+            glGetDoublev(GL_PROJECTION_MATRIX, projection_matrix);
+            glGetIntegerv(GL_VIEWPORT, viewport);
+
+            // goto ortho
+            glMatrixMode(GL_PROJECTION);
+            glPushMatrix();
+            glLoadIdentity();
+            glOrtho(0, 1, 0, 1, 1, 129);
+            glMatrixMode(GL_MODELVIEW);
+
+            for (int i=0; i<NUM_COUNTRIES-1; i++) {
+                GLdouble winX, winY, winZ;
+
+                gluProject(country_names_pos[i].x, country_names_pos[i].y, country_names_pos[i].z,
+                            modelview_matrix,
+                            projection_matrix,
+                            viewport,
+                            &winX, &winY, &winZ);
+                //glColor4f(1,1,1,.5f);
+                //renderText(winX, winY,0,countries[i].name );
+
+                // now isn't this the nastiest trick
+                if (winZ < 0.999f) {
+                //    glColor4f(1,1,1,.5f);
+                    //~ fontShadow();
+                    //~ fontShadowColor(0,0,0);
+                    //~ fontSize(10+4000*(0.999-winZ));
+                    //~ fontDrawString(winX, winY, countries[i].name);
+                    renderText(winX, winY,winZ,countries[i].name );
+                }
+            }
+
+            glMatrixMode(GL_PROJECTION);
+            glPopMatrix();
+            glMatrixMode(GL_MODELVIEW);*/
     //glPushMatrix();
     /*glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -205,38 +253,45 @@ void GLWidget::drawEarth()
     glBegin(GL_LINES);
     glColor3f(1,0,0);
 
-    for (int i=0; i<NUM_COUNTRIES-1; i++) {
+    /*for (int i=0; i<NUM_COUNTRIES-1; i++) {
         lonLat2Point(countries[i].lon, countries[i].lat, &country_names_pos[i]);
        // cout << country_names_pos[i].x << " - " << country_names_pos[i].y << endl;
-        glPushMatrix();
+        //glPushMatrix();
 
         glTranslatef(country_names_pos[i].x, country_names_pos[i].y, country_names_pos[i].z);
         th=(90.0-countries[i].lon)*M_PI/180.0;
         ph=countries[i].lat*M_PI/180.0;
+       // glutSolidCube(0.1);
+       glBegin(GL_TRIANGLES);//glBegin(GL_LINES);
         glVertex3f(0.25*sin(th)*cos(ph),
                    0.25*sin(th)*sin(ph),
                    0.25*cos(th));
         glVertex3f((0.25+ 0.02)*sin(th)*cos(ph),
                    (0.25+ 0.02)*sin(th)*sin(ph),
                    (0.25+ 0.02)*cos(th));
-    }
-    glEnd();
-    glDisable(GL_BLEND);*/
+        glVertex2f(0,0);
+        glVertex2f(10,10);
+        glEnd();
+        //glPopMatrix();
+    }*/
+    /*glEnd();
+    glDisable(GL_BLEND);
     //glPopMatrix();
     //qDebug() << country_names_pos.x << country_names_pos.y << endl;
     /*glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glLineWidth(lineWidth);
+    glLineWidth(lineWidth);*/
 
-    for (y=0; y<=EARTH_LAT_RES; y++) {
-        glBegin(GL_LINE_STRIP);
-        for (x=0; x<=EARTH_LON_RES; x++) {
-            glColor4f(0,0,0,1.0f);
-            glVertex3fv((float*)&vertices[x][y]);
-        }
-        glEnd();
-    }
-
+    //for (y=0; y<=EARTH_LAT_RES; y++) {
+       // glBegin(GL_LINE_STRIP);
+        //for (x=0; x<=EARTH_LON_RES; x++) {
+           // glColor4f(0,0,0,1.0f);
+           // glVertex3fv((float*)&vertices[x][y]);
+            //qDebug() << vertices[x][y].x << vertices[x][y].y << vertices[x][y].z;
+        //}
+       // glEnd();
+    //}
+/*
     for (x=0; x<=EARTH_LON_RES; x++) {
         glBegin(GL_LINE_STRIP);
         for (y=0; y<=EARTH_LAT_RES; y++) {
@@ -274,8 +329,7 @@ void GLWidget::paintGL()
     glScalef(WORLD_SCALE, WORLD_SCALE, WORLD_SCALE);
     glScalef(scaleAll, scaleAll, scaleAll);
     glRotatef(rotY, 1,0,0);
-    glRotatef(rotX, 0,1,0);
-    GLdouble modelview_matrix[16];
+    glRotatef(rotX, 0,1,0);    
     glGetDoublev(GL_MODELVIEW_MATRIX, modelview_matrix);
     drawEarth();
     //draw_markers( "xglobe-markers", 0, 0x000000FF, 0x00FFFFFF );
@@ -316,8 +370,10 @@ QPointF GLWidget::pixelPosToViewPos(const QPointF& p)
 
 void GLWidget::rotateBy(int xAngle, int yAngle, int zAngle)
 {
-    rotX -= xAngle;
-    rotY += yAngle;
+    rotX -= (xAngle - angleX)/scaleAll;
+    rotY += (yAngle - angleY)/scaleAll;
+    angleX = xAngle;
+    angleY = yAngle;
     //zRot += zAngle;
     updateGL();
 }
@@ -325,7 +381,7 @@ void GLWidget::rotateBy(int xAngle, int yAngle, int zAngle)
 void GLWidget::mousePressEvent(QMouseEvent *event)
 {
     lastPos = event->pos();
-    //qDebug() << lastPos << endl;
+    qDebug() << lastPos;
     //qDebug() << pixelPosToViewPos(lastPos) << endl;
 }
 
@@ -333,10 +389,14 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
 {
     int deltX = event->x() - lastPos.x();
     int deltY = event->y() - lastPos.y();
+     qDebug() << pixelPosToViewPos(lastPos) << endl;
 
 	if (event->buttons() & Qt::LeftButton) {
-		rotX += deltX*0.25f/scaleAll;
-		rotY += deltY*0.25f/scaleAll;
+		angleX = deltX*0.25f/scaleAll;
+		angleY = deltY*0.25f/scaleAll;
+		rotX += angleX;
+		rotY += angleY;
+
 		//rotateBy(1 * deltX, 0 , 0);
 		//qDebug() << 'x : ' << event->x() << endl;
 		//qDebug() << 'y : ' << event->y() << endl;

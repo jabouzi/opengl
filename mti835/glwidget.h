@@ -47,7 +47,7 @@ public:
 private:
     float time_;
     QPoint lastPos;
-    GLfloat angle;
+    float angleX, angleY;
     CGLTexture earthTexture;
     Vector vertices[EARTH_LON_RES+1][EARTH_LAT_RES+1];
     Mapping mapping[EARTH_LON_RES+1][EARTH_LAT_RES+1];
@@ -56,9 +56,8 @@ private:
     int idsList[3];
     int currentSkinId;
     int lineWidth;
-    float temp1;
-    float temp2;
     QString skin;
+    GLdouble modelview_matrix[16];
 
     void initializeGL();
     void paintGL();
