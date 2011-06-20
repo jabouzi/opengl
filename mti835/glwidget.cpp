@@ -197,18 +197,26 @@ void GLWidget::drawEarth()
      //glColor3f(1,1,1);
      //renderText(0, 0,0,"Skander");
 
-    Vector tunisia[1];
-    lonLat2Point(33.886917, 9.537499,  &tunisia[0]);
-    qDebug() << tunisia[0].x << " - " << tunisia[0].y << " - " << tunisia[0].z;
+    Vector mycountries[2];
+    lonLat2Point(33.886917, 9.537499,  &mycountries[0]);
+    qDebug() << mycountries[0].x << " - " << mycountries[0].y << " - " << mycountries[0].z;
+    lonLat2Point(42.8333, 12.8333,  &mycountries[1]);
+    qDebug() << mycountries[1].x << " - " << mycountries[1].y << " - " << mycountries[1].z;
+
     //glPushMatrix();
     //glTranslatef(-3430.94, 997.739, -5283.19 );
     //glTranslatef(-877.284  ,  3556.09  ,  -5221.44);
-    glBegin(GL_POINTS);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glLineWidth(10);
+    glBegin(GL_LINES);
         glColor4f(1,0,0,1.0f);
-        glVertex3f (-877.284  ,  3556.09  ,  -5221.44);
+        glVertex3f (mycountries[0].x  ,  mycountries[0].y  ,  mycountries[0].z);
+        glVertex3f (mycountries[1].x  ,  mycountries[1].y  ,  mycountries[1].z);
         //glutSolidCube(30);
         glPointSize (50.0);
    glEnd();
+   glDisable(GL_BLEND);
    //glPopMatrix();
 
    /*glEnable(GL_BLEND);
