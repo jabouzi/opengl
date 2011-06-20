@@ -8,6 +8,7 @@
 #include "GLTexture.h"
 #include "vmath.h"
 #include "markers_parser.h"
+//#include "log.h"
 #include <iostream>
 using namespace::std;
 
@@ -43,6 +44,7 @@ public:
     float getRotY();
     float getRotZ();
     void updateEarth();
+    //Log *pLog;
 
 private:
     float time_;
@@ -58,6 +60,7 @@ private:
     int lineWidth;
     QString skin;
     GLdouble modelview_matrix[16];
+    bool firstMove;
 
     void initializeGL();
     void paintGL();
