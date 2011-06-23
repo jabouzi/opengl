@@ -197,41 +197,31 @@ void GLWidget::drawEarth()
      //glColor3f(1,1,1);
      //renderText(0, 0,0,"Skander");
 
-    Vector mycountries[2];
+    Vector mycountries[3];
     lonLat2Point(33.886917, 9.537499,  &mycountries[0]);
-    //qDebug() << mycountries[0].x << " - " << mycountries[0].y << " - " << mycountries[0].z;
+    qDebug() << mycountries[0].x << " - " << mycountries[0].y << " - " << mycountries[0].z;
     lonLat2Point(42.8333, 12.8333,  &mycountries[1]);
-    //qDebug() << mycountries[1].x << " - " << mycountries[1].y << " - " << mycountries[1].z;
+    qDebug() << mycountries[1].x << " - " << mycountries[1].y << " - " << mycountries[1].z;
+    lonLat2Point(0, 0,  &mycountries[2]);
+    qDebug() << mycountries[2].x << " - " << mycountries[2].y << " - " << mycountries[2].z;
 
     //glPushMatrix();
     //glTranslatef(-3430.94, 997.739, -5283.19 );
     //glTranslatef(-877.284  ,  3556.09  ,  -5221.44);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glLineWidth(2);
+    glLineWidth(1);
     glBegin(GL_LINES);
         glColor4f(1,0,0,1.0f);
         glVertex3f (mycountries[0].x  ,  mycountries[0].y  ,  mycountries[0].z);
-        glVertex3f (mycountries[0].x  ,  mycountries[0].y+100  ,  mycountries[0].z+100);
+        glVertex3f (mycountries[0].x  ,  mycountries[0].y  ,  mycountries[0].z-500);
+        glVertex3f (mycountries[1].x  ,  mycountries[1].y  ,  mycountries[1].z);
+        glVertex3f (mycountries[1].x  ,  mycountries[1].y  ,  mycountries[1].z-500);
         //glutSolidCube(30);
-        glPointSize (50.0);
-   glEnd();
+        //glPointSize (50.0);
+    glEnd();
 
-   glBegin(GL_LINES);
-   glColor4f(1,0,0,1.0f);
-   for (int i=0; i<NUM_COUNTRIES-1; i++) {
-       //country_names_pos[i].x, country_names_pos[i].y, country_names_pos[i].z
-       th=(90.0-country_names_pos[i].x)*M_PI/180.0;
-       ph=country_names_pos[i].y*M_PI/180.0;
-       qDebug() << 0.25*sin(th)*cos(ph) << " - " << 0.25*sin(th)*sin(ph);
-       glVertex3f(0.25*sin(th)*cos(ph),
-                  0.25*sin(th)*sin(ph),
-                  0.25*cos(th));
-       glVertex3f((0.25+1)*sin(th)*cos(ph),
-                  (0.25+1)*sin(th)*sin(ph),
-                  (0.25+1)*cos(th));
-   }
-   glEnd();
+
 
    glDisable(GL_BLEND);
    //glPopMatrix();
@@ -293,7 +283,7 @@ void GLWidget::drawEarth()
         glEnd();
     }*/
 
-    glDisable(GL_BLEND);
+    //glDisable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
 
 }
