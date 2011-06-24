@@ -22,6 +22,11 @@ void GLWidget::paintGL()
             glVertex2i(10, 145);
         glEnd();
 
+        QFont myFont( "TypeWriter", 10, QFont::Bold);
+
+        glColor4f(1.0, 0.0, 0.0, 1.0);
+        renderText(20, 20, QString("Hello World"), myFont );
+
         glFlush();
 }
 
