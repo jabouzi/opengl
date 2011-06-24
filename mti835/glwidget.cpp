@@ -221,6 +221,12 @@ void GLWidget::drawEarth()
         //glPointSize (50.0);
     glEnd();
 
+    //glDisable(GL_DEPTH_TEST);
+    QFont myFont( "TypeWriter", 8, QFont::Bold);
+    glColor4f(1.0, 1.0, 1.0, 1.0);
+    renderText(mycountries[0].x+3*100  ,  mycountries[0].y  ,  mycountries[0].z-500, QString("Tunisia"), myFont );
+    renderText(mycountries[1].x+2*100  ,  mycountries[1].y  ,  mycountries[1].z-500, QString("Italy"), myFont  );
+
 
 
    glDisable(GL_BLEND);
