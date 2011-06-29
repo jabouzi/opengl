@@ -59,6 +59,8 @@ private:
     QString skin;
     GLdouble modelview_matrix[16];
     bool firstMove;
+    bool showCountryNames;
+    bool showLatLong;
 
     void initializeGL();
     void paintGL();

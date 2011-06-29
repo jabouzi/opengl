@@ -20,6 +20,8 @@ GLWidget::GLWidget()
     skinsList << "images/earth.tga" << "images/earth_elevation.tga" << "images/earth_vector.tga";
     currentSkinId = 1;
     firstMove = false;
+    showCountryNames = false;
+    showLatLong = false;
 }
 
 void GLWidget::initializeGL()
@@ -120,46 +122,51 @@ void GLWidget::drawEarth()
 
    glDisable(GL_BLEND);
 */
-
-    glEnable(GL_BLEND);
-    glLineWidth(1);
-    Vector countries_positions[NUM_COUNTRIES];
-    for (int i=0; i<NUM_COUNTRIES-1; i++) {
-       lonLat2Point(countries[i].lon, countries[i].lat, &countries_positions[i]);
-       z_prim = -500;
-       if (countries_positions[i].z > 0) z_prim = 500;
-       glBegin(GL_LINES);
-           glColor4f(1,0,0,1.0f);
-           glVertex3f (countries_positions[i].x  ,  countries_positions[i].y  ,  countries_positions[i].z);
-           glVertex3f (countries_positions[i].x  ,  countries_positions[i].y  ,  countries_positions[i].z+z_prim);
-       glEnd();
-       QFont myFont( "TypeWriter", 8, QFont::Bold);
-       glColor4f(1.0, 1.0, 1.0, 1.0);
-       renderText(countries_positions[i].x  ,  countries_positions[i].y  ,  countries_positions[i].z+z_prim, QString(countries[i].name), myFont );
-    }
-    glDisable(GL_BLEND);
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glLineWidth(lineWidth);
-    for (y=0; y<=EARTH_LAT_RES; y++) {
-       glBegin(GL_LINE_STRIP);
-       for (x=0; x<=EARTH_LON_RES; x++) {
-           glColor4f(0,0,0,0.5f);
-           glVertex3fv((float*)&vertices[x][y]);
-       }
-      glEnd();
+    if (showCountryNames)
+    {
+        glEnable(GL_BLEND);
+        glLineWidth(1);
+        Vector countries_positions[NUM_COUNTRIES];
+        QFont myFont( "TypeWriter", 6*scaleAll, QFont::Bold);
+        for (int i=0; i<NUM_COUNTRIES-1; i++) {
+           lonLat2Point(countries[i].lon, countries[i].lat, &countries_positions[i]);
+           z_prim = -500;
+           if (countries_positions[i].z > 0) z_prim = 500;
+           glBegin(GL_LINES);
+               glColor4f(1,0,0,1.0f);
+               glVertex3f (countries_positions[i].x  ,  countries_positions[i].y  ,  countries_positions[i].z);
+               glVertex3f (countries_positions[i].x  ,  countries_positions[i].y  ,  countries_positions[i].z+z_prim);
+           glEnd();
+           glColor4f(1.0, 1.0, 1.0, 1.0);
+           renderText(countries_positions[i].x  ,  countries_positions[i].y  ,  countries_positions[i].z+z_prim, QString(countries[i].name), myFont );
+        }
+        glDisable(GL_BLEND);
     }
 
-    for (x=0; x<=EARTH_LON_RES; x++) {
-       glBegin(GL_LINE_STRIP);
-       for (y=0; y<=EARTH_LAT_RES; y++) {
-           glColor4f(0,0,0,0.5f);
-           glVertex3fv((float*)&vertices[x][y]);
-       }
-       glEnd();
+    if (showLatLong)
+    {
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glLineWidth(lineWidth);
+        for (y=0; y<=EARTH_LAT_RES; y++) {
+           glBegin(GL_LINE_STRIP);
+           for (x=0; x<=EARTH_LON_RES; x++) {
+               glColor4f(0,0,0,0.5f);
+               glVertex3fv((float*)&vertices[x][y]);
+           }
+          glEnd();
+        }
+
+        for (x=0; x<=EARTH_LON_RES; x++) {
+           glBegin(GL_LINE_STRIP);
+           for (y=0; y<=EARTH_LAT_RES; y++) {
+               glColor4f(0,0,0,0.5f);
+               glVertex3fv((float*)&vertices[x][y]);
+           }
+           glEnd();
+        }
+        glDisable(GL_BLEND);
     }
-    glDisable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
 
 }
