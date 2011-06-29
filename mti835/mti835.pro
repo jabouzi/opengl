@@ -15,8 +15,6 @@ SOURCES += main.cpp\
     glwidget.cpp \
     GLTexture.cpp \
     qtglut.cpp \
-    vmath.c \
-    markers_parser.cpp \
     log.cpp
 
 HEADERS  += mainwindow.h \
@@ -24,8 +22,6 @@ HEADERS  += mainwindow.h \
     GLTexture.h \
     countries.h \
     qtglut.h \
-    markers_parser.h \
-    vmath.h \
     log.h
 
 FORMS    += mainwindow.ui

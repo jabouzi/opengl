@@ -62,103 +62,9 @@ void GLWidget::updateEarth()
     updateGL();
 }
 
-void GLWidget::draw_markers(char * markerfile, int bitmap_mode, unsigned mcol, unsigned lcol)
-{
-    static Marker * marker;
-    static int init=0;
-    static int markernr;
-    int i;
-    double th,ph;
-    static int markers_id;
-//    static float matrix[16];
-    VMvect bx, by;
-    float marker_h = 0.02;
-    float m[16];
-    float vx,vy,vz;
-
-    if(!init){
-        init=1;
-        /*if(markerfile!=(char *)NULL){
-            marker=load_markers(markerfile,&markernr);
-        } else {
-            marker=load_markers("xglobe-markers",&markernr);
-        }*/
-//        marker=load_markers("earth-markers-schaumann",&markernr);
-/*#ifdef DEBUG
-        fprintf(stderr,"markernr=%d\n",markernr);
-        fprintf(stderr,"marker[0].name=%s\n",marker[0].name);
-        fprintf(stderr,"marker[N-1].name=%s\n",marker[markernr-1].name);
-#endif*/
-        markers_id = glGenLists(1);
-        glNewList(markers_id, GL_COMPILE);
-//        glColor3f((double)((mcol>>16) & 0xFF)/255.0,
-//                  (double)((mcol>> 8) & 0xFF)/255.0,
-//                  (double)((mcol>> 0) & 0xFF)/255.0);
-       // glColor4ubv((GLubyte *)&mcol);
-        //glDisable(GL_LIGHTING);
-        glDisable(GL_TEXTURE_2D);
-        glBegin(GL_LINES);
-
-        for (int i=0; i<NUM_COUNTRIES-1; i++) {
-            th=(90.0-countries[i].lon)*M_PI/180.0;
-            ph=countries[i].lat*M_PI/180.0;
-            glVertex3f(0.25*sin(th)*cos(ph),
-                       0.25*sin(th)*sin(ph),
-                       0.25*cos(th));
-            glVertex3f((0.25+marker_h)*sin(th)*cos(ph),
-                       (0.25+marker_h)*sin(th)*sin(ph),
-                       (0.25+marker_h)*cos(th));
-        }
-        glEnd();
-        //glEnable(GL_LIGHTING);
-        glEnable(GL_TEXTURE_2D);
-        glEndList();
-    }
-
-    glCallList(markers_id);
-
-//    glColor3f((double)((lcol>>16) & 0xFF)/255.0,
-//              (double)((lcol>> 8) & 0xFF)/255.0,
-//              (double)((lcol>> 0) & 0xFF)/255.0);
-    //glColor4ubv((GLubyte *)&lcol);
-    //glDisable(GL_LIGHTING);
-    glDisable(GL_TEXTURE_2D);
-
-    /*if(!bitmap_mode){
-        bx=vec_xyz(1.0,0.0,0.0);
-        by=vec_xyz(0.15,1.0,0.0);
-        glGetFloatv( GL_MODELVIEW_MATRIX, m );
-        vx=bx.x; vy=bx.y; vz=bx.z;
-        bx.x=vx*m[0]+vy*m[1]+vz*m[2];
-        bx.y=vx*m[4]+vy*m[5]+vz*m[6];
-        bx.z=vx*m[8]+vy*m[9]+vz*m[10];
-        vx=by.x; vy=by.y; vz=by.z;
-        by.x=vx*m[0]+vy*m[1]+vz*m[2];
-        by.y=vx*m[4]+vy*m[5]+vz*m[6];
-        by.z=vx*m[8]+vy*m[9]+vz*m[10];
-    }*/
-    //for(i=0;i<markernr;i++){
-        //th=(90.0-marker[i].lon)*M_PI/180.0;
-        //ph=marker[i].lat*M_PI/180.0;
-        //myGlWrite(
-                  //vec_xyz((0.25+marker_h*1.1)*sin(th)*cos(ph),
-                  //        (0.25+marker_h*1.1)*sin(th)*sin(ph),
-                  //        (0.25+marker_h*1.1)*cos(th)),
-                  //bx, by,
-                  //0,  /* 1/0: take screen/absolute directions for bx, by */
-                  //0.005,
-                  //bitmap_mode,  /* bitmap mode */
-                  //marker[i].name
-                 //);
-    //}
-    //glEnable(GL_LIGHTING);
-    glEnable(GL_TEXTURE_2D);
-}
-
-
 void GLWidget::drawEarth()
 {
-    double th,ph;
+    float z_prim = 0.0;
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, currentSkinId);
@@ -179,37 +85,17 @@ void GLWidget::drawEarth()
             glVertex3fv((GLfloat*)&vertices[x+1][y+1]);
         }
 		glEnd();
-    }
+	}
 
-    Vector	country_names_pos[NUM_COUNTRIES];
-    for (int i=0; i<NUM_COUNTRIES-1; i++) {
-        lonLat2Point(countries[i].lon, countries[i].lat, &country_names_pos[i]);
-        glPushMatrix();
-
-        glTranslatef(country_names_pos[i].x, country_names_pos[i].y, country_names_pos[i].z);
-        glColor3f(1,0,0);
-        float radius;
-        radius = 20+10*sinf(i+time_);
-        //glutSolidCube(radius);
-
-        glPopMatrix();
-    }
-     //glColor3f(1,1,1);
-     //renderText(0, 0,0,"Skander");
-
-    Vector mycountries[3];
+    /*Vector mycountries[3];
     lonLat2Point(33.886917, 9.537499,  &mycountries[0]);
     qDebug() << mycountries[0].x << " - " << mycountries[0].y << " - " << mycountries[0].z;
     lonLat2Point(42.8333, 12.8333,  &mycountries[1]);
     qDebug() << mycountries[1].x << " - " << mycountries[1].y << " - " << mycountries[1].z;
-    lonLat2Point(0, 0,  &mycountries[2]);
+    lonLat2Point(35.86166, 104.195397,   &mycountries[2]);
     qDebug() << mycountries[2].x << " - " << mycountries[2].y << " - " << mycountries[2].z;
 
-    //glPushMatrix();
-    //glTranslatef(-3430.94, 997.739, -5283.19 );
-    //glTranslatef(-877.284  ,  3556.09  ,  -5221.44);
     glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glLineWidth(1);
     glBegin(GL_LINES);
         glColor4f(1,0,0,1.0f);
@@ -217,6 +103,8 @@ void GLWidget::drawEarth()
         glVertex3f (mycountries[0].x  ,  mycountries[0].y  ,  mycountries[0].z-500);
         glVertex3f (mycountries[1].x  ,  mycountries[1].y  ,  mycountries[1].z);
         glVertex3f (mycountries[1].x  ,  mycountries[1].y  ,  mycountries[1].z-500);
+        glVertex3f (mycountries[2].x  ,  mycountries[2].y  ,  mycountries[2].z);
+        glVertex3f (mycountries[2].x  ,  mycountries[2].y  ,  mycountries[2].z+500);
         //glutSolidCube(30);
         //glPointSize (50.0);
     glEnd();
@@ -224,72 +112,54 @@ void GLWidget::drawEarth()
     //glDisable(GL_DEPTH_TEST);
     QFont myFont( "TypeWriter", 8, QFont::Bold);
     glColor4f(1.0, 1.0, 1.0, 1.0);
-    renderText(mycountries[0].x+3*100  ,  mycountries[0].y  ,  mycountries[0].z-500, QString("Tunisia"), myFont );
-    renderText(mycountries[1].x+2*100  ,  mycountries[1].y  ,  mycountries[1].z-500, QString("Italy"), myFont  );
+    renderText(mycountries[0].x  ,  mycountries[0].y  ,  mycountries[0].z-500, QString("Tunisia"), myFont );
+    renderText(mycountries[1].x  ,  mycountries[1].y  ,  mycountries[1].z-500, QString("Italy"), myFont  );
+    renderText(mycountries[2].x  ,  mycountries[2].y  ,  mycountries[2].z+500, QString("China"), myFont  );
 
 
 
    glDisable(GL_BLEND);
-   //glPopMatrix();
+*/
 
-   /*glEnable(GL_BLEND);
-   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-   glLineWidth(lineWidth);
-    for (y=0; y<=EARTH_LAT_RES; y++) {
-        glBegin(GL_LINE_STRIP);
-        for (x=0; x<=EARTH_LON_RES; x++) {
-            glColor4f(0,0,0,0.5f);
-            glVertex3fv((float*)&vertices[x][y]);
-        }
+    glEnable(GL_BLEND);
+    glLineWidth(1);
+    Vector countries_positions[NUM_COUNTRIES];
+    for (int i=0; i<NUM_COUNTRIES-1; i++) {
+       lonLat2Point(countries[i].lon, countries[i].lat, &countries_positions[i]);
+       z_prim = -500;
+       if (countries_positions[i].z > 0) z_prim = 500;
+       glBegin(GL_LINES);
+           glColor4f(1,0,0,1.0f);
+           glVertex3f (countries_positions[i].x  ,  countries_positions[i].y  ,  countries_positions[i].z);
+           glVertex3f (countries_positions[i].x  ,  countries_positions[i].y  ,  countries_positions[i].z+z_prim);
        glEnd();
+       QFont myFont( "TypeWriter", 8, QFont::Bold);
+       glColor4f(1.0, 1.0, 1.0, 1.0);
+       renderText(countries_positions[i].x  ,  countries_positions[i].y  ,  countries_positions[i].z+z_prim, QString(countries[i].name), myFont );
+    }
+    glDisable(GL_BLEND);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glLineWidth(lineWidth);
+    for (y=0; y<=EARTH_LAT_RES; y++) {
+       glBegin(GL_LINE_STRIP);
+       for (x=0; x<=EARTH_LON_RES; x++) {
+           glColor4f(0,0,0,0.5f);
+           glVertex3fv((float*)&vertices[x][y]);
+       }
+      glEnd();
     }
 
     for (x=0; x<=EARTH_LON_RES; x++) {
-        glBegin(GL_LINE_STRIP);
-        for (y=0; y<=EARTH_LAT_RES; y++) {
-            glColor4f(0,0,0,0.5f);
-            glVertex3fv((float*)&vertices[x][y]);
-        }
-        glEnd();
-    }*/
-
-
-    /*glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glLineWidth(lineWidth);
-    glBegin(GL_LINES);
-    glColor3f(1,0,0);*/
-
-
-    /*glEnd();
-    glDisable(GL_BLEND);
-
-    //qDebug() << country_names_pos.x << country_names_pos.y << endl;*/
-    //glEnable(GL_BLEND);
-    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    //glLineWidth(lineWidth);
-
-   /* for (y=0; y<=EARTH_LAT_RES; y++) {
-        glBegin(GL_POINTS);
-        for (x=0; x<=EARTH_LON_RES; x++) {
-            glColor4f(0,0,0,1.0f);
-            glVertex3fv((float*)&vertices[x][y]);
-            glPointSize (10.0);
-            qDebug() << vertices[x][y].x << vertices[x][y].y << vertices[x][y].z;
-        }
+       glBegin(GL_LINE_STRIP);
+       for (y=0; y<=EARTH_LAT_RES; y++) {
+           glColor4f(0,0,0,0.5f);
+           glVertex3fv((float*)&vertices[x][y]);
+       }
        glEnd();
-    }*/
-
-    /*for (x=0; x<=EARTH_LON_RES; x++) {
-        glBegin(GL_LINE_STRIP);
-        for (y=0; y<=EARTH_LAT_RES; y++) {
-            glColor4f(0,0,0,1.0f);
-            glVertex3fv((float*)&vertices[x][y]);
-        }
-        glEnd();
-    }*/
-
-    //glDisable(GL_BLEND);
+    }
+    glDisable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
 
 }

@@ -6,8 +6,6 @@
 #include <math.h>
 #include <string.h>
 #include "GLTexture.h"
-#include "vmath.h"
-#include "markers_parser.h"
 //#include "log.h"
 #include <iostream>
 using namespace::std;
