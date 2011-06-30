@@ -1,11 +1,11 @@
 #include "log.h"
 
 Log::Log(const QString &filename) {
-  fileName = filename;  
+  fileName = filename;
 }
 
-void Log::Write(QString logline){  
-  QDateTime date = QDateTime::currentDateTime();  
+void Log::Write(QString logline){
+  QDateTime date = QDateTime::currentDateTime();
   //QString now = date.toString("dd-MM-yyyy hh:mm:ss");
   QFile file(fileName);
   file.open(QFile::WriteOnly | QFile::Append);
@@ -17,3 +17,4 @@ void Log::Write(QString logline){
 Log::~Log(){
   //file.close();
 }
+//
