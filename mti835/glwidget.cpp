@@ -20,7 +20,7 @@ GLWidget::GLWidget()
     skinsList << "images/earth.tga" << "images/earth_elevation.tga" << "images/earth_vector.tga";
     currentSkinId = 1;
     firstMove = false;
-    showCountryNames = false;
+    showCountryNames = true;
     showLatLong = true;
 }
 
@@ -106,7 +106,7 @@ void GLWidget::drawEarth()
 		glEnd();
 	}
 
-    Vector mycountries[5];
+    /*Vector mycountries[5];
     lonLat2Point(33.886917, 9.537499,  &mycountries[0]);
     qDebug() << mycountries[0].x << " - " << mycountries[0].y << " - " << mycountries[0].z;
     lonLat2Point(42.8333, 12.8333,  &mycountries[1]);
@@ -118,20 +118,32 @@ void GLWidget::drawEarth()
     lonLat2Point(-34.0000, -64.0000,   &mycountries[4]);
     qDebug() << mycountries[4].x << " - " << mycountries[4].y << " - " << mycountries[2].z;
 
+    Vector mycountries2[5];
+    lonLat2Point2(33.886917, 9.537499,  &mycountries2[0]);
+    qDebug() << mycountries2[0].x << " - " << mycountries2[0].y << " - " << mycountries2[0].z;
+    lonLat2Point2(42.8333, 12.8333,  &mycountries2[1]);
+    qDebug() << mycountries2[1].x << " - " << mycountries2[1].y << " - " << mycountries2[1].z;
+    lonLat2Point2(35.86166, 104.195397,   &mycountries2[2]);
+    qDebug() << mycountries2[2].x << " - " << mycountries2[2].y << " - " << mycountries2[2].z;
+    lonLat2Point2(62.0000, 15.0000,   &mycountries2[3]);
+    qDebug() << mycountries2[3].x << " - " << mycountries2[3].y << " - " << mycountries2[2].z;
+    lonLat2Point2(-34.0000, -64.0000,   &mycountries2[4]);
+    qDebug() << mycountries2[4].x << " - " << mycountries2[4].y << " - " << mycountries2[2].z;
+
     glEnable(GL_BLEND);
     glLineWidth(1);
     glBegin(GL_LINES);
         glColor4f(1,0,0,1.0f);
         glVertex3f (mycountries[0].x  ,  mycountries[0].y  ,  mycountries[0].z);
-        glVertex3f (mycountries[0].x  ,  mycountries[0].y+200  ,  mycountries[0].z-500);
+        glVertex3f (mycountries2[0].x  ,  mycountries2[0].y  ,  mycountries2[0].z);
         glVertex3f (mycountries[1].x  ,  mycountries[1].y  ,  mycountries[1].z);
-        glVertex3f (mycountries[1].x  ,  mycountries[1].y+200  ,  mycountries[1].z-500);
+        glVertex3f (mycountries2[1].x  ,  mycountries2[1].y  ,  mycountries2[1].z);
         glVertex3f (mycountries[2].x  ,  mycountries[2].y  ,  mycountries[2].z);
-        glVertex3f (mycountries[2].x-500  ,  mycountries[2].y+200  ,  mycountries[2].z+100);
+        glVertex3f (mycountries2[2].x  ,  mycountries2[2].y  ,  mycountries2[2].z);
         glVertex3f (mycountries[3].x  ,  mycountries[3].y  ,  mycountries[3].z);
-        glVertex3f (mycountries[3].x  ,  mycountries[3].y+200  ,  mycountries[3].z-500);
+        glVertex3f (mycountries2[3].x  ,  mycountries2[3].y  ,  mycountries2[3].z);
         glVertex3f (mycountries[4].x  ,  mycountries[4].y  ,  mycountries[4].z);
-        glVertex3f (mycountries[4].x+500  ,  mycountries[4].y-200  ,  mycountries[4].z-200);
+        glVertex3f (mycountries2[4].x  ,  mycountries2[4].y  ,  mycountries2[4].z);
         //glutSolidCube(30);
         //glPointSize (50.0);
     glEnd();
@@ -142,7 +154,7 @@ void GLWidget::drawEarth()
     //renderText(mycountries[0].x  ,  mycountries[0].y  ,  mycountries[0].z-500, QString("Tunisia"), myFont );
     //renderText(mycountries[1].x  ,  mycountries[1].y  ,  mycountries[1].z-500, QString("Italy"), myFont  );
     //renderText(mycountries[2].x  ,  mycountries[2].y  ,  mycountries[2].z+500, QString("China"), myFont  );
-    glDisable(GL_BLEND);
+    glDisable(GL_BLEND);*/
 
     /*double th,ph;
 
@@ -176,15 +188,17 @@ void GLWidget::drawEarth()
         glEnable(GL_BLEND);
         glLineWidth(1);
         Vector countries_positions[NUM_COUNTRIES];
+        Vector countries_positions2[NUM_COUNTRIES];
         QFont myFont( "TypeWriter", 6*scaleAll, QFont::Bold);
         for (int i=0; i<NUM_COUNTRIES-1; i++) {
            lonLat2Point(countries[i].lon, countries[i].lat, &countries_positions[i]);
+           lonLat2Point2(countries[i].lon, countries[i].lat, &countries_positions2[i],i);
            z_prim = -500;
            if (countries_positions[i].z > 0) z_prim = 500;
            glBegin(GL_LINES);
                glColor4f(1,0,0,1.0f);
                glVertex3f (countries_positions[i].x  ,  countries_positions[i].y  ,  countries_positions[i].z);
-               glVertex3f (countries_positions[i].x  ,  countries_positions[i].y  ,  countries_positions[i].z+z_prim);
+               glVertex3f (countries_positions2[i].x  ,  countries_positions2[i].y  ,  countries_positions2[i].z);
            glEnd();
            glColor4f(1.0, 1.0, 1.0, 1.0);
            renderText(countries_positions[i].x  ,  countries_positions[i].y  ,  countries_positions[i].z+z_prim, QString(countries[i].name), myFont );
@@ -229,6 +243,18 @@ void GLWidget::lonLat2Point(float lon, float lat, Vector *pos)
     pos->x = fabsf(cosf(angY)) * EARTH_RADIUS * sinf(angX);
     pos->y = EARTH_RADIUS * sinf(angY);
     pos->z = fabsf(cosf(angY)) * EARTH_RADIUS * cosf(angX);
+}
+
+void GLWidget::lonLat2Point2(float lon, float lat, Vector *pos, int increment)
+{
+    // lat -90..90 => Y
+    // lon -180..180 => X
+    float    angX, angY;
+    angX = (180.f+lat) * PI / 180.f;
+    angY = lon * PI / 180.f;
+    pos->x = fabsf(cosf(angY)) * EARTH_RADIUS2 * sinf(angX);
+    pos->y = EARTH_RADIUS * sinf(angY);
+    pos->z = fabsf(cosf(angY)) * EARTH_RADIUS2 * cosf(angX);
 }
 
 

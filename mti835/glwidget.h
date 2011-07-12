@@ -16,6 +16,7 @@ using namespace::std;
 #define EARTH_LON_RES    60    // Longitude Resolution (x)
 #define EARTH_LAT_RES    60    // Latitude Resolution (y)
 #define EARTH_RADIUS    6378    // in kilometers
+#define EARTH_RADIUS2   6878    // in kilometers
 #define WORLD_SCALE        0.01f    // scale of all the world
 #define MIN_SCALE        0.5f    // how much can we zoom out
 #define MAX_SCALE        1.9f    // and in
@@ -68,6 +69,7 @@ private:
     void timerEvent(QTimerEvent *event);
     void drawEarth();
     void lonLat2Point(float , float , Vector *);
+    void lonLat2Point2(float , float , Vector *, int);
     void mouseMoveEvent(QMouseEvent *e);
     void mousePressEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *);

@@ -15,13 +15,17 @@ SOURCES += main.cpp\
     glwidget.cpp \
     GLTexture.cpp \
     qtglut.cpp \
-    log.cpp
+    log.cpp \
+    vmath.c \
+    sunpos.c
 
 HEADERS  += mainwindow.h \
     glwidget.h \
     GLTexture.h \
     countries.h \
     qtglut.h \
-    log.h
+    log.h \
+    vmath.h \
+    sunpos.h
 
 FORMS    += mainwindow.ui

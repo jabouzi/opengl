@@ -17,4 +17,3 @@ void Log::Write(QString logline){
 Log::~Log(){
   //file.close();
 }
-//
