@@ -21,7 +21,7 @@ GLWidget::GLWidget()
     currentSkinId = 1;
     firstMove = false;
     showCountryNames = false;
-    showLatLong = false;
+    showLatLong = true;
 }
 
 void GLWidget::initializeGL()
@@ -66,16 +66,33 @@ void GLWidget::updateEarth()
 
 void GLWidget::drawEarth()
 {
+    /*GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+    GLfloat mat_shininess[] = { 10.0 };
+    GLfloat light_position[] = { -877.284  ,  3556.09  ,  -5221.44 , 0.0 };
+
+    glClearColor (0.0, 0.0, 0.0, 0.0);
+    glShadeModel (GL_SMOOTH);
+
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, mat_specular);
+
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    glEnable(GL_DEPTH_TEST);*/
+
     float z_prim = 0.0;
-    glEnable(GL_DEPTH_TEST);
+    /*glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, currentSkinId);
     glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);*/
     glColor3f(1,1,1);
     int x, y;
     for (y=0; y<EARTH_LAT_RES; y++) {
-		glBegin(GL_QUAD_STRIP);
+        glBegin(GL_POINTS);
+        //glBegin(GL_QUAD_STRIP);
         for (x=0; x<EARTH_LON_RES; x++) {
             glTexCoord2fv((GLfloat*)&mapping[x][y]);
             glVertex3fv((GLfloat*)&vertices[x][y]);
@@ -89,39 +106,71 @@ void GLWidget::drawEarth()
 		glEnd();
 	}
 
-    /*Vector mycountries[3];
+    Vector mycountries[5];
     lonLat2Point(33.886917, 9.537499,  &mycountries[0]);
     qDebug() << mycountries[0].x << " - " << mycountries[0].y << " - " << mycountries[0].z;
     lonLat2Point(42.8333, 12.8333,  &mycountries[1]);
     qDebug() << mycountries[1].x << " - " << mycountries[1].y << " - " << mycountries[1].z;
     lonLat2Point(35.86166, 104.195397,   &mycountries[2]);
     qDebug() << mycountries[2].x << " - " << mycountries[2].y << " - " << mycountries[2].z;
+    lonLat2Point(62.0000, 15.0000,   &mycountries[3]);
+    qDebug() << mycountries[3].x << " - " << mycountries[3].y << " - " << mycountries[2].z;
+    lonLat2Point(-34.0000, -64.0000,   &mycountries[4]);
+    qDebug() << mycountries[4].x << " - " << mycountries[4].y << " - " << mycountries[2].z;
 
     glEnable(GL_BLEND);
     glLineWidth(1);
     glBegin(GL_LINES);
         glColor4f(1,0,0,1.0f);
         glVertex3f (mycountries[0].x  ,  mycountries[0].y  ,  mycountries[0].z);
-        glVertex3f (mycountries[0].x  ,  mycountries[0].y  ,  mycountries[0].z-500);
+        glVertex3f (mycountries[0].x  ,  mycountries[0].y+200  ,  mycountries[0].z-500);
         glVertex3f (mycountries[1].x  ,  mycountries[1].y  ,  mycountries[1].z);
-        glVertex3f (mycountries[1].x  ,  mycountries[1].y  ,  mycountries[1].z-500);
+        glVertex3f (mycountries[1].x  ,  mycountries[1].y+200  ,  mycountries[1].z-500);
         glVertex3f (mycountries[2].x  ,  mycountries[2].y  ,  mycountries[2].z);
-        glVertex3f (mycountries[2].x  ,  mycountries[2].y  ,  mycountries[2].z+500);
+        glVertex3f (mycountries[2].x-500  ,  mycountries[2].y+200  ,  mycountries[2].z+100);
+        glVertex3f (mycountries[3].x  ,  mycountries[3].y  ,  mycountries[3].z);
+        glVertex3f (mycountries[3].x  ,  mycountries[3].y+200  ,  mycountries[3].z-500);
+        glVertex3f (mycountries[4].x  ,  mycountries[4].y  ,  mycountries[4].z);
+        glVertex3f (mycountries[4].x+500  ,  mycountries[4].y-200  ,  mycountries[4].z-200);
         //glutSolidCube(30);
         //glPointSize (50.0);
     glEnd();
 
     //glDisable(GL_DEPTH_TEST);
-    QFont myFont( "TypeWriter", 8, QFont::Bold);
-    glColor4f(1.0, 1.0, 1.0, 1.0);
-    renderText(mycountries[0].x  ,  mycountries[0].y  ,  mycountries[0].z-500, QString("Tunisia"), myFont );
-    renderText(mycountries[1].x  ,  mycountries[1].y  ,  mycountries[1].z-500, QString("Italy"), myFont  );
-    renderText(mycountries[2].x  ,  mycountries[2].y  ,  mycountries[2].z+500, QString("China"), myFont  );
+    //QFont myFont( "TypeWriter", 8, QFont::Bold);
+    //glColor4f(1.0, 1.0, 1.0, 1.0);
+    //renderText(mycountries[0].x  ,  mycountries[0].y  ,  mycountries[0].z-500, QString("Tunisia"), myFont );
+    //renderText(mycountries[1].x  ,  mycountries[1].y  ,  mycountries[1].z-500, QString("Italy"), myFont  );
+    //renderText(mycountries[2].x  ,  mycountries[2].y  ,  mycountries[2].z+500, QString("China"), myFont  );
+    glDisable(GL_BLEND);
 
+    /*double th,ph;
 
+        float marker_h = 0.02;
 
-   glDisable(GL_BLEND);
-*/
+    glEnable(GL_BLEND);
+    glLineWidth(1);
+     glBegin(GL_LINES);
+     glColor4f(1,0,0,1.0f);
+   // Vector countries_positions[NUM_COUNTRIES];
+    //for (int i=0; i<NUM_COUNTRIES-1; i++) {
+                    //33.886917, 9.537499
+                    th=(90.0-9.537499)*M_PI/180.0;
+                    ph=33.886917*M_PI/180.0;
+                    glVertex3f(0.25*sin(th)*cos(ph),
+                               0.25*sin(th)*sin(ph),
+                               0.25*cos(th));
+                    qDebug() << 0.25*sin(th)*cos(ph) << 0.25*sin(th)*sin(ph) << 0.25*cos(th);
+                    glVertex3f((0.25+marker_h)*sin(th)*cos(ph),
+                               (0.25+marker_h)*sin(th)*sin(ph),
+                               (0.25+marker_h)*cos(th));
+                    lonLat2Point(0.25*sin(th)*cos(ph),0.25*sin(th)*sin(ph),  &mycountries[5]);
+                    qDebug() << mycountries[5].x << " - " << mycountries[5].y << " - " << mycountries[5].z;
+
+    //}
+                    glEnd();
+    glDisable(GL_BLEND);*/
+
     if (showCountryNames)
     {
         glEnable(GL_BLEND);
@@ -168,7 +217,6 @@ void GLWidget::drawEarth()
         glDisable(GL_BLEND);
     }
     glDisable(GL_TEXTURE_2D);
-
 }
 
 void GLWidget::lonLat2Point(float lon, float lat, Vector *pos)
@@ -197,7 +245,6 @@ void GLWidget::paintGL()
     glRotatef(rotX, 0,1,0);    
     glGetDoublev(GL_MODELVIEW_MATRIX, modelview_matrix);
     drawEarth();
-    //draw_markers( "xglobe-markers", 0, 0x000000FF, 0x00FFFFFF );
     glPopMatrix();
 }
 
