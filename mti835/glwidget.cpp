@@ -47,6 +47,22 @@ void GLWidget::initializeGL()
 			mapping[x][y].v = (float)y / EARTH_LAT_RES;			
         }
     }
+
+       GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+       GLfloat mat_shininess[] = { 20.0 };
+       GLfloat light_position[] = { 2.0, 3.0, 2.0, 0.0 };
+
+       //glClearColor (0.0, 0.0, 0.0, 0.0);
+       //glShadeModel (GL_SMOOTH);
+
+       glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+       glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+       glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+       glLightfv(GL_LIGHT0, GL_SPECULAR, mat_specular);
+
+       glEnable(GL_LIGHTING);
+       glEnable(GL_LIGHT0);
+       glEnable(GL_DEPTH_TEST);
 }
 
 void GLWidget::setSkin(int listIndex)
@@ -79,20 +95,20 @@ void GLWidget::drawEarth()
     glLightfv(GL_LIGHT0, GL_SPECULAR, mat_specular);
 
     glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
-    glEnable(GL_DEPTH_TEST);*/
+    glEnable(GL_LIGHT0);*/
+    glEnable(GL_DEPTH_TEST);
 
     float z_prim = 0.0;
-    /*glEnable(GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, currentSkinId);
     glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);*/
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
     glColor3f(1,1,1);
     int x, y;
     for (y=0; y<EARTH_LAT_RES; y++) {
-        glBegin(GL_POINTS);
-        //glBegin(GL_QUAD_STRIP);
+        //glBegin(GL_POINTS);
+        glBegin(GL_QUAD_STRIP);
         for (x=0; x<EARTH_LON_RES; x++) {
             glTexCoord2fv((GLfloat*)&mapping[x][y]);
             glVertex3fv((GLfloat*)&vertices[x][y]);
@@ -201,7 +217,7 @@ void GLWidget::drawEarth()
                glVertex3f (countries_positions2[i].x  ,  countries_positions2[i].y  ,  countries_positions2[i].z);
            glEnd();
            glColor4f(1.0, 1.0, 1.0, 1.0);
-           renderText(countries_positions[i].x  ,  countries_positions[i].y  ,  countries_positions[i].z+z_prim, QString(countries[i].name), myFont );
+           renderText(countries_positions2[i].x  ,  countries_positions2[i].y  ,  countries_positions2[i].z, QString(countries[i].name), myFont );
         }
         glDisable(GL_BLEND);
     }
@@ -230,7 +246,9 @@ void GLWidget::drawEarth()
         }
         glDisable(GL_BLEND);
     }
+
     glDisable(GL_TEXTURE_2D);
+    //glDisable(GL_LIGHTING);
 }
 
 void GLWidget::lonLat2Point(float lon, float lat, Vector *pos)
