@@ -48,21 +48,7 @@ void GLWidget::initializeGL()
         }
     }
 
-       GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-       GLfloat mat_shininess[] = { 20.0 };
-       GLfloat light_position[] = { 2.0, 3.0, 2.0, 0.0 };
 
-       //glClearColor (0.0, 0.0, 0.0, 0.0);
-       //glShadeModel (GL_SMOOTH);
-
-       glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-       glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-       glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-       glLightfv(GL_LIGHT0, GL_SPECULAR, mat_specular);
-
-       glEnable(GL_LIGHTING);
-       glEnable(GL_LIGHT0);
-       glEnable(GL_DEPTH_TEST);
 }
 
 void GLWidget::setSkin(int listIndex)
@@ -84,27 +70,34 @@ void GLWidget::drawEarth()
 {
     /*GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
     GLfloat mat_shininess[] = { 10.0 };
-    GLfloat light_position[] = { -877.284  ,  3556.09  ,  -5221.44 , 0.0 };
+    GLfloat light_position[] = { -877.284  ,  3556.09  ,  -5221.44 , 0.0 };*/
 
-    glClearColor (0.0, 0.0, 0.0, 0.0);
-    glShadeModel (GL_SMOOTH);
+    Vector mycountries[0];
+    lonLat2Point(33.886917, 9.537499,  &mycountries[0]);
 
-    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+    //glMatrixMode( GL_MODELVIEW );
+       //glLoadIdentity();
+    glPushMatrix();
+
+       GLfloat light_diff_g[] = { 1.0, 1.0, 1.0, 1.0 };
+       GLfloat light_amb_g[] = { 1.0, 1.0, 1.0, 1.0 };
+       GLfloat light_position[] = { mycountries[0].x , mycountries[0].y , mycountries[0].z };
+
+    glLightfv(GL_LIGHT0, GL_DIFFUSE,  light_diff_g);
+    glLightfv(GL_LIGHT0, GL_AMBIENT,  light_amb_g);
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, mat_specular);
 
+     glPopMatrix();
+
+    //float z_prim = 0.0;
+    glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);*/
-    glEnable(GL_DEPTH_TEST);
-
-    float z_prim = 0.0;
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, currentSkinId);
-    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    glColor3f(1,1,1);
+    //glEnable(GL_TEXTURE_2D);
+    //glBindTexture(GL_TEXTURE_2D, currentSkinId);
+    //glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    //glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    //glColor3f(1,1,1);
     int x, y;
     for (y=0; y<EARTH_LAT_RES; y++) {
         //glBegin(GL_POINTS);
@@ -121,6 +114,17 @@ void GLWidget::drawEarth()
         }
 		glEnd();
 	}
+
+
+    glPushMatrix();
+
+    qDebug() << mycountries[0].x << " - " << mycountries[0].y << " - " << mycountries[0].z;
+    glTranslatef(mycountries[0].x , mycountries[0].y , mycountries[0].z);
+    glColor3f(1,0,0);
+    glutSolidCube(130);
+
+    glPopMatrix();
+
 
     /*Vector mycountries[5];
     lonLat2Point(33.886917, 9.537499,  &mycountries[0]);
@@ -210,14 +214,14 @@ void GLWidget::drawEarth()
            lonLat2Point(countries[i].lon, countries[i].lat, &countries_positions[i]);
            lonLat2Point2(countries[i].lon, countries[i].lat, &countries_positions2[i],i);
            z_prim = -500;
-           if (countries_positions[i].z > 0) z_prim = 500;
-           glBegin(GL_LINES);
+           /*glBegin(GL_LINES);
                glColor4f(1,0,0,1.0f);
                glVertex3f (countries_positions[i].x  ,  countries_positions[i].y  ,  countries_positions[i].z);
                glVertex3f (countries_positions2[i].x  ,  countries_positions2[i].y  ,  countries_positions2[i].z);
            glEnd();
            glColor4f(1.0, 1.0, 1.0, 1.0);
            renderText(countries_positions2[i].x  ,  countries_positions2[i].y  ,  countries_positions2[i].z, QString(countries[i].name), myFont );
+        */
         }
         glDisable(GL_BLEND);
     }
