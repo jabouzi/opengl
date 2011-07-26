@@ -16,10 +16,10 @@ void GLWidget::initializeGL()
 }
 
 void GLWidget::cube (void) {
-    glRotatef(angle, 1.0, 0.0, 0.0); //rotate on the x axis
+    //glRotatef(angle, 1.0, 0.0, 0.0); //rotate on the x axis
     glRotatef(angle, 0.0, 1.0, 0.0); //rotate on the y axis
-    glRotatef(angle, 0.0, 0.0, 1.0); //rotate on the z axis
-    glColor3f(1.0, 0.0, 0.0);
+    //glRotatef(angle, 0.0, 0.0, 1.0); //rotate on the z axis
+    //glColor3f(1.0, 0.0, 0.0);
     glutWireCube(2);
 }
 

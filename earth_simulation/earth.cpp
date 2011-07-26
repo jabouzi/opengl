@@ -88,6 +88,8 @@ int showCountries	= 1;
 int lineWidth		= 1;
 int showVxp[6]		= {0,0,0,0,0,0};
 
+static int spin = 0;
+
 Vxp	*vxp_data[6];
 
 // forward
@@ -191,7 +193,7 @@ void DrawEarth()
 	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
-	glColor3f(1,1,1);
+	//glColor3f(1,1,1);
 
 	int x, y;
 
@@ -245,6 +247,27 @@ void DrawEarth()
 	}
 
 	glDisable(GL_TEXTURE_2D);
+    
+    glPushMatrix();
+    
+    glTranslatef(0  ,  3000  , 7000);
+    glColor3f(1,0,0);
+    glutSolidCube(130);
+
+    glPopMatrix();
+    
+    glPushMatrix();
+    
+    glTranslatef(3000  ,  0  , 7000);
+    glColor3f(1,0,0);
+    glutSolidCube(130);
+
+    glPopMatrix();
+    
+   
+       
+    
+    
 }
 
 void DrawVxp(Vxp *vxp)
@@ -291,8 +314,26 @@ void LonLat2Point(float lon, float lat, Vector *pos)
 
 void DrawScene() 
 { 	
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); 
+    GLfloat position[] = { 0.0, 0.0, -7000, 1.0 };
 
+   glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+   //glPushMatrix ();
+   //gluLookAt (0.0, 0.0, -500.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+
+   //glPushMatrix ();
+   //glRotated ((GLdouble) spin, 1.0, 0.0, 0.0);
+   glLightfv (GL_LIGHT0, GL_POSITION, position);
+
+   glTranslated (0.0, 0.0, 1.5);
+   glDisable (GL_LIGHTING);
+   glColor3f (0.0, 1.0, 1.0);
+   glutWireCube (0.1);
+   glEnable (GL_LIGHTING);
+   //glPopMatrix ();
+   
+   
+
+    
 	glPushMatrix(); 
 
 	static float time = 0;
@@ -387,8 +428,7 @@ void DrawScene()
 		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();
 		glMatrixMode(GL_MODELVIEW);
-	}
-
+	}        
 
 	glutSwapBuffers(); 
 

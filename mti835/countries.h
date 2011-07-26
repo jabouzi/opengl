@@ -9,7 +9,7 @@ struct Country {
 };
 
 Country countries[NUM_COUNTRIES] = {
-
+    // lon - lat
     {"Aruba", 12.5000, -69.9667},
     {"Antigua and Barbuda", 17.0500, -61.8000},
     {"Afghanistan", 33.0000, 65.0000},

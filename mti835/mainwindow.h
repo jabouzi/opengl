@@ -25,6 +25,15 @@ private slots:
      void updateRotations();
      void rotateEarth();
      void updateSkin();
+     void activateBackground();
+     void showEarth();
+     void showTexture();
+     void showLines();
+     void showAxis();
+     void showNames();
+     void turnLignt();
+     void showCurve();
+     void animate();
 
 };
 

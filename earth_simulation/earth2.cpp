@@ -39,6 +39,9 @@ float autoRotX = 0, autoRotY = 0;
 double angle = 0;
 int lineWidth		= 1;
 
+static int spin = 0;
+
+
 // forward
 void LonLat2Point(float lon, float lat, Vector *pos);
 
@@ -54,7 +57,7 @@ void Resize( GLsizei iWidth, GLsizei iHeight )
 
 void Idle()
 {
-	glutPostRedisplay();
+	//glutPostRedisplay();
 }
 
 void Init()
@@ -82,16 +85,16 @@ void Init()
 
 void DrawEarth()
 {	
-	//glEnable(GL_TEXTURE_2D);
-	//earthTexture.Use();	
-	//glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	//glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	glColor3f(1,1,1);
+	glEnable(GL_TEXTURE_2D);
+	earthTexture.Use();	
+	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	//glColor3f(1,1,1);
 	int x, y;
 	for (y=0; y<EARTH_LAT_RES; y++) {
 		glBegin(GL_QUAD_STRIP);		
 		for (x=0; x<EARTH_LON_RES; x++) {
-            glColor2d(1,0,0);
+            //glColor3d(1,1,1);
 			glTexCoord2fv((float*)&mapping[x][y]);
 			glVertex3fv((float*)&vertices[x][y]);
 			glTexCoord2fv((float*)&mapping[x][y+1]);
@@ -129,7 +132,7 @@ void DrawEarth()
 
 		glDisable(GL_BLEND);
         
-	//glDisable(GL_TEXTURE_2D);
+	glDisable(GL_TEXTURE_2D);
 }
 
 void LonLat2Point(float lon, float lat, Vector *pos)
@@ -145,8 +148,9 @@ void LonLat2Point(float lon, float lat, Vector *pos)
 }
 
 void DrawScene() 
-{ 	
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+{ 	  
+    glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glLoadIdentity();
     glPushMatrix();
     glTranslatef(0,0,-125);
     glScalef(WORLD_SCALE, WORLD_SCALE, WORLD_SCALE);
@@ -156,10 +160,43 @@ void DrawScene()
     GLdouble modelview_matrix[16];
     glGetDoublev(GL_MODELVIEW_MATRIX, modelview_matrix);
     DrawEarth();
-    glPopMatrix();
-    glutSwapBuffers(); 
-    //rotY++;
     rotX++;
+    glPopMatrix();
+    GLfloat position[] = { 0.0, 0.0, 7000, 1.0 };
+
+   
+   glPushMatrix ();
+   //gluLookAt (0.0, 0.0, -500.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+
+   //glPushMatrix ();
+   glRotated ((GLdouble) 90, 1.0, 0.0, 0.0);
+   glLightfv (GL_LIGHT0, GL_POSITION, position);
+
+   //glTranslated (0.0, 0.0, 1.5);
+   //glDisable (GL_LIGHTING);
+   //glColor3f (0.0, 1.0, 1.0);
+   //glutWireCube (0.1);
+   glEnable (GL_LIGHTING);
+   glEnable (GL_LIGHT0);
+   glPopMatrix ();
+   
+    glutSwapBuffers(); 
+    //rotY++;glPushMatrix ();
+    
+}
+
+void mouse(int button, int state, int x, int y)
+{
+   switch (button) {
+      case GLUT_LEFT_BUTTON:
+         if (state == GLUT_DOWN) {
+            spin = (spin + 30) % 360;
+            glutPostRedisplay();
+         }
+         break;
+      default:
+         break;
+   }
 }
 
 int main(int argc, char **argv) 
@@ -172,13 +209,14 @@ int main(int argc, char **argv)
 	glutInitDisplayMode( GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE );
 	glutCreateWindow( "Earth Simulation" );
 	glutDisplayFunc(DrawScene );
-	glutIdleFunc(Idle );
+	//glutIdleFunc(Idle );
 	glutReshapeFunc(Resize );
 	Init(); 
-	glClearColor(0.0f, 0.0f, 0.0f,0); 
+	//glClearColor(0.0f, 0.0f, 0.0f,0); 
 	glEnable(GL_DEPTH_TEST); 
 	glDepthFunc(GL_LEQUAL);
 	Resize(iWidth, iHeight); 
+    //glutMouseFunc(mouse);
 	glutMainLoop(); 	
 	return 0;
 }

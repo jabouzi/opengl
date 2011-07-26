@@ -17,7 +17,8 @@ SOURCES += main.cpp\
     qtglut.cpp \
     log.cpp \
     vmath.c \
-    sunpos.c
+    sunpos.c \
+    imageloader.cpp
 
 HEADERS  += mainwindow.h \
     glwidget.h \
@@ -26,6 +27,7 @@ HEADERS  += mainwindow.h \
     qtglut.h \
     log.h \
     vmath.h \
-    sunpos.h
+    sunpos.h \
+    imageloader.h
 
 FORMS    += mainwindow.ui

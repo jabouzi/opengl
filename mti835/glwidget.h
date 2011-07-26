@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
+#include "imageloader.h"
 #include "GLTexture.h"
 //#include "log.h"
 #include <iostream>
@@ -43,6 +44,17 @@ public:
     float getRotY();
     float getRotZ();
     void updateEarth();
+    void startAnimation();
+    void StopAnimation();
+    bool showCountryNames;
+    bool showLatLong;
+    bool showCurve;
+    bool showAxis;
+    bool activateLight;
+    bool activateTexture;
+    bool activateBackground;
+    bool showEarth;
+    bool animate;
     //Log *pLog;
 
 private:
@@ -59,23 +71,31 @@ private:
     int lineWidth;
     QString skin;
     GLdouble modelview_matrix[16];
-    bool firstMove;
-    bool showCountryNames;
-    bool showLatLong;
+    bool firstMove;    
+    int timerId;
+    bool idle;
+    int _textureId;
+    Image* image;
 
     void initializeGL();
     void paintGL();
     void resizeGL(int, int);
     void timerEvent(QTimerEvent *event);
+    GLuint loadMipmappedTexture(Image *);
+    void drawStars();
     void drawEarth();
+    void drawAxis();
+    void drawNames();
+    void drawNormals();
+    void drawCurve();
+    void drawSatellites();
+    void drawLight();
     void lonLat2Point(float , float , Vector *);
     void lonLat2Point2(float , float , Vector *, int);
     void mouseMoveEvent(QMouseEvent *e);
     void mousePressEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *);
-    QPointF pixelPosToViewPos(const QPointF&);
-    void drawAxis();
-    void draw_markers(char *, int, unsigned, unsigned);
+    QPointF pixelPosToViewPos(const QPointF&);    
 
 signals:
      void rotationsChanged();
