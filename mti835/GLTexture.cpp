@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <GL/glu.h>
 #include "GLTexture.h"
 
 CGLTexture::CGLTexture()

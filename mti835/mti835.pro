@@ -4,11 +4,11 @@
 #
 #-------------------------------------------------
 
-QT       += core gui opengl
+QT  += core gui opengl
 
 TARGET = mti835
 TEMPLATE = app
-
+LIBS += -lGLU 
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -30,4 +30,4 @@ HEADERS  += mainwindow.h \
     sunpos.h \
     imageloader.h
 
-FORMS    += mainwindow.ui
+FORMS += mainwindow.ui

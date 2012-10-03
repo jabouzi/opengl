@@ -1,6 +1,6 @@
 #include <QtGui>
 #include <QtOpenGL>
-
+#include <GL/glu.h>
 #include "glwidget.h"
 #include "qtglut.h"
 #include "countries.h"

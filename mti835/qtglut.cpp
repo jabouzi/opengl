@@ -9,6 +9,7 @@
 */
 
 #include <QtOpenGL>
+#include <GL/glu.h>
 #include <math.h>
 
 #ifndef M_PI
